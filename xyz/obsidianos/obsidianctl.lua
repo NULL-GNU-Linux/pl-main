@@ -14,7 +14,7 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing source code...")
-			os.execute("git clone " .. pkg.homepage .. " .")
+			os.execute("git clone " .. pkg.homepage)
 		end)
 
 		hook("build")(function()
@@ -34,11 +34,7 @@ function pkg.source()
 		end)
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-			local ret = os.execute("make install")
-			if ret ~= 0 then
-				error("Installation failed")
-			end
-
+			local ret = os.execute("cd obsidianctl && make install")
 			print("Creating symlinks...")
 			print("Setting up configuration...")
 			table.insert(pkg.files, "/usr/local/sbin/obsidianctl")
@@ -46,7 +42,6 @@ function pkg.source()
 
 		hook("post_install")(function()
 			print("Post-installation setup...")
-
 			print("Updating man database...")
 			os.execute("mandb -q")
 			print("Setting permissions...")
