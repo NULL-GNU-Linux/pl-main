@@ -1,6 +1,6 @@
 pkg = {
 	name = "xyz.obsidianos.obsidianctl",
-	version = "NaN",
+	version = "git",
 	description = "Obsidianctl",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "MIT",
@@ -42,12 +42,9 @@ function pkg.source()
 
 		hook("post_install")(function()
 			print("Post-installation setup...")
-			print("Updating man database...")
-			os.execute("mandb -q")
 			print("Setting permissions...")
 			os.execute("chmod 755 /usr/local/sbin/obsidianctl")
 			os.execute("chown root:root /usr/local/sbin/obsidianctl")
-
 			print("")
 			print(
 				"╔════════════════════════════════════════╗"
@@ -139,13 +136,6 @@ function pkg.uninstall()
 
 		hook("post_uninstall")(function()
 			print("Cleanup...")
-
-			print("Updating man database...")
-			os.execute("mandb -q")
-
-			print("Removing user group...")
-			os.execute("groupdel hello-users 2>/dev/null")
-
 			print("Removing cache files...")
 			os.execute("rm -rf /var/cache/hello")
 
