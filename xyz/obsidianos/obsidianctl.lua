@@ -19,7 +19,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Building...")
-			ret = os.execute("make")
+			ret = os.execute("cd obsidianctl && make")
 			if ret ~= 0 then
 				error("Build failed")
 			end
