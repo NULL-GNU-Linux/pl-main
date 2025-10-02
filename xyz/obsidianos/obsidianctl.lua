@@ -49,7 +49,7 @@ function pkg.source()
 			print(
 				"╔════════════════════════════════════════╗"
 			)
-			print("║  " .. pkg.provides .. " installed!          ║")
+			print("║  " .. pkg.provides[1] .. " installed!          ║")
 			print("║  Version: " .. pkg.version .. "                        ║")
 			print(
 				"╚════════════════════════════════════════╝"
