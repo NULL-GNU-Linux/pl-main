@@ -14,7 +14,7 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing source code...")
-			os.execute("git clone " .. pkg.homepage)
+			os.execute("git clone " .. pkg.homepage .. ".")
 		end)
 
 		hook("build")(function()
