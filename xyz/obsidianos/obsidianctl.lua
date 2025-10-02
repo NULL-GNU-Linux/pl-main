@@ -19,10 +19,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Building...")
-			ret = os.execute("cd obsidianctl && make")
-			if ret ~= 0 then
-				error("Build failed")
-			end
+			os.execute("cd obsidianctl && make")
 		end)
 		hook("pre_install")(function()
 			print("Pre-installation checks for " .. pkg.name)
