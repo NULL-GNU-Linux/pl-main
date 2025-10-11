@@ -44,7 +44,7 @@ function pkg.source()
 			print("Post-installation setup...")
 			print("Setting permissions...")
 			os.execute("sudo chmod 755 " .. ROOT .. "/usr/local/sbin/obsidianctl")
-			os.execute("sudo chown root:root " .. ROOT .. "usr/local/sbin/obsidianctl")
+			os.execute("sudo chown root:root " .. ROOT .. "/usr/local/sbin/obsidianctl")
 			print("")
 			print(
 				"╔════════════════════════════════════════╗"
