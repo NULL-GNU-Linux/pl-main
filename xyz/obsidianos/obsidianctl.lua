@@ -37,14 +37,14 @@ function pkg.source()
 			local ret = os.execute("cd obsidianctl && cp obsidianctl " .. ROOT .. "/usr/local/sbin/obsidianctl")
 			print("Creating symlinks...")
 			print("Setting up configuration...")
-			table.insert(pkg.files, "/usr/local/sbin/obsidianctl")
+			table.insert(pkg.files, ROOT .. "/usr/local/sbin/obsidianctl")
 		end)
 
 		hook("post_install")(function()
 			print("Post-installation setup...")
 			print("Setting permissions...")
-			os.execute("sudo chmod 755 /usr/local/sbin/obsidianctl")
-			os.execute("sudo chown root:root /usr/local/sbin/obsidianctl")
+			os.execute("sudo chmod 755 " .. ROOT .. "/usr/local/sbin/obsidianctl")
+			os.execute("sudo chown root:root " .. ROOT .. "usr/local/sbin/obsidianctl")
 			print("")
 			print(
 				"╔════════════════════════════════════════╗"
