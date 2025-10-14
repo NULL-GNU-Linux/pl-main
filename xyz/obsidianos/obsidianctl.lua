@@ -14,12 +14,12 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing source code...")
-			os.execute("git clone " .. pkg.homepage)
+			gitclone(pkg.homepage, "obsidianctl")
 		end)
 
 		hook("build")(function()
 			print("Building...")
-			os.execute("cd obsidianctl && make")
+			sh("cd obsidianctl && make")
 		end)
 		hook("pre_install")(function()
 			print("Pre-installation checks for " .. pkg.name)
@@ -27,24 +27,21 @@ function pkg.source()
 			local available = space_check:read("*all")
 			space_check:close()
 			print("Available space: " .. available)
-			os.execute("id")
+			sh("id")
 			if os.getenv("USER") ~= "root" then
 				print("Warning: Not running as root, installation may fail")
 			end
 		end)
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-			local ret = os.execute("cd obsidianctl && cp obsidianctl " .. ROOT .. "/usr/local/sbin/obsidianctl")
+			install("obsidianctl/obsidianctl", "/usr/local/sbin/obsidianctl", "755")
+			sh("chown root:root " .. ROOT .. "/usr/local/sbin/obsidianctl")
 			print("Creating symlinks...")
 			print("Setting up configuration...")
-			table.insert(pkg.files, ROOT .. "/usr/local/sbin/obsidianctl")
 		end)
 
 		hook("post_install")(function()
 			print("Post-installation setup...")
-			print("Setting permissions...")
-			os.execute("sudo chmod 755 " .. ROOT .. "/usr/local/sbin/obsidianctl")
-			os.execute("sudo chown root:root " .. ROOT .. "/usr/local/sbin/obsidianctl")
 			print("")
 			print(
 				"╔════════════════════════════════════════╗"
@@ -71,13 +68,14 @@ function pkg.binary()
 
 			print("Downloading binary package...")
 			local url = "https://example.org/binaries/hello-" .. pkg.version .. "-linux-x86_64.tar.gz"
-			os.execute("wget " .. url .. " -O /tmp/hello-binary.tar.gz")
+			wget(url, "/tmp/hello-binary.tar.gz")
 		end)
 
-		hook("install")(function()
+			hook("install")(function()
 			print("Installing binary files...")
 
-			os.execute("tar -xzf /tmp/hello-binary.tar.gz -C /usr/local")
+			sh("tar -xzf " .. ROOT .. "/tmp/hello-binary.tar.gz -C " .. ROOT .. "/usr/local")
+			table.insert(pkg.files, ROOT .. "/usr/local/hello") -- Track the extracted directory
 
 			print("Creating wrapper script...")
 			local wrapper = [[#!/bin/bash
@@ -85,19 +83,15 @@ export HELLO_HOME=/usr/local/hello
 export LD_LIBRARY_PATH=/usr/local/hello/lib:$LD_LIBRARY_PATH
 exec /usr/local/hello/bin/hello "$@"
 ]]
-			local f = io.open("/usr/bin/hello", "w")
-			f:write(wrapper)
-			f:close()
-			os.execute("chmod +x /usr/bin/hello")
-
-			table.insert(pkg.files, "/usr/bin/hello")
-			table.insert(pkg.files, "/usr/local/hello")
+			sh("printf %s " .. shell_escape(wrapper) .. " > " .. ROOT .. "/usr/bin/hello")
+			sh("chmod +x " .. ROOT .. "/usr/bin/hello")
+			table.insert(pkg.files, ROOT .. "/usr/bin/hello")
 		end)
 
 		hook("post_install")(function()
 			print("Binary installation complete!")
 			print("Verifying installation...")
-			os.execute("/usr/bin/hello --version")
+			sh(ROOT .. "/usr/bin/hello --version")
 
 			print("")
 			print("Installation successful!")
@@ -111,37 +105,37 @@ function pkg.uninstall()
 			print("Preparing to uninstall " .. pkg.name)
 
 			print("Stopping related services...")
-			os.execute("systemctl stop hello.service 2>/dev/null")
+			sh("systemctl stop hello.service 2>/dev/null")
 
 			print("Backing up configuration...")
-			os.execute("cp /etc/hello/hello.conf /etc/hello/hello.conf.bak 2>/dev/null")
+			sh("cp " .. ROOT .. "/etc/hello/hello.conf " .. ROOT .. "/etc/hello/hello.conf.bak 2>/dev/null")
 		end)
 
 		hook("uninstall")(function()
 			print("Removing " .. pkg.name .. "...")
 
 			print("Removing binaries...")
-			os.execute("rm -f /usr/bin/hello")
-			os.execute("rm -f /usr/local/bin/hello")
+			uninstall("/usr/bin/hello")
+			uninstall("/usr/local/bin/hello")
 
 			print("Removing libraries...")
-			os.execute("rm -rf /usr/local/hello")
+			uninstall("/usr/local/hello")
 
 			print("Removing man pages...")
-			os.execute("rm -f /usr/share/man/man1/hello.1.gz")
+			uninstall("/usr/share/man/man1/hello.1.gz")
 
 			print("Removing configuration...")
-			os.execute("rm -rf /etc/hello")
+			uninstall("/etc/hello")
 		end)
 
 		hook("post_uninstall")(function()
 			print("Cleanup...")
 			print("Removing cache files...")
-			os.execute("rm -rf /var/cache/hello")
+			uninstall("/var/cache/hello")
 
 			print("")
 			print(pkg.name .. " has been uninstalled")
-			print("Configuration backup: /etc/hello/hello.conf.bak")
+			print("Configuration backup: " .. ROOT .. "/etc/hello/hello.conf.bak")
 		end)
 	end
 end
@@ -153,12 +147,12 @@ function pkg.upgrade()
 		if from_version:match("^1%.") then
 			print("Major version upgrade detected")
 			print("Migrating configuration format...")
-			os.execute("hello-config-migrate /etc/hello/hello.conf")
+			sh(ROOT .. "/usr/local/sbin/hello-config-migrate " .. ROOT .. "/etc/hello/hello.conf")
 		end
 
 		if from_version < "2.0.0" then
 			print("Database schema update required...")
-			os.execute("hello-db-upgrade")
+			sh(ROOT .. "/usr/local/sbin/hello-db-upgrade")
 		end
 
 		print("Upgrade hooks complete")
