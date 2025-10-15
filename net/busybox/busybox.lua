@@ -24,9 +24,9 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring BusyBox...")
-			sh("cd /tmp/busybox-" .. pkg.version .. " && make defconfig")
+			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make defconfig")
 			print("Building BusyBox...")
-			sh("cd /tmp/busybox-" .. pkg.version .. " && make -j$(nproc)")
+			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make -j$(nproc)")
 		end)
 
 		hook("pre_install")(function()
@@ -42,7 +42,7 @@ function pkg.source()
 
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-			install("/tmp/busybox-" .. pkg.version .. "/busybox", "/usr/bin/busybox", "755")
+			install("/tmp/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", "/usr/bin/busybox", "755")
 			sh("chown root:root " .. ROOT .. "/usr/bin/busybox")
 
 			print("Creating symlinks for applets...")
