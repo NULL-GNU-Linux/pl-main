@@ -14,6 +14,11 @@ pkg = {
 function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
+			print("Preparing config file...")
+			wget(
+				"https://raw.githubusercontent.com/NULL-GNU-Linux/busybox/refs/heads/main/" .. pkg.version,
+				"/tmp/busybox-config-" .. pkg.version
+			)
 			print("Preparing BusyBox source...")
 			local url = "https://github.com/mirror/busybox/archive/refs/tags/"
 				.. pkg.version:gsub("%.", "_")
@@ -24,7 +29,8 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring BusyBox...")
-			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make defconfig")
+			sh("cp /tmp/busybox-config-" .. pkg.version, "/tmp/busybox-" .. pkg.version:gsub("%.", "_") .. "/.config")
+			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
 			print("Building BusyBox...")
 			os.execute("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make -j$(nproc)")
 		end)
