@@ -18,7 +18,7 @@ function pkg.source()
 			local url = "https://github.com/mirror/busybox/archive/refs/tags/"
 				.. pkg.version:gsub("%.", "_")
 				.. ".tar.gz"
-			curl(url, "/tmp/busybox-" .. pkg.version .. ".tar.gz")
+			wget(url, "/tmp/busybox-" .. pkg.version .. ".tar.gz")
 			sh("tar -xzf /tmp/busybox-" .. pkg.version .. ".tar.gz -C /tmp")
 		end)
 
