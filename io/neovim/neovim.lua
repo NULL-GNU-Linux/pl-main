@@ -33,7 +33,7 @@ function pkg.source()
 		end)
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-			sh("cd nvimsrc && sudo make install")
+			sh("cd nvimsrc && sudo make CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/ install")
 		end)
 
 		hook("post_install")(function()
