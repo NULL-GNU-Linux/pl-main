@@ -59,8 +59,6 @@ function pkg.source()
 				"/usr/bin/busybox",
 				"755"
 			)
-			sh("chown root:root " .. ROOT .. "/usr/bin/busybox")
-
 			print("Creating symlinks for applets...")
 			sh(
 				ROOT
