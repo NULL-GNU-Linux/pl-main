@@ -4,7 +4,7 @@ pkg = {
 	description = "The Swiss Army Knife of Embedded Linux",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "GPL-2.0",
-	homepage = "https://busybox.net",
+	homepage = "https://git.busybox.net/busybox",
 	depends = {},
 	conflicts = {},
 	provides = { "busybox" },
@@ -15,9 +15,9 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing BusyBox source...")
-			local url = "https://busybox.net/downloads/busybox-" .. pkg.version .. ".tar.bz2"
-			curl(url, "/tmp/busybox-" .. pkg.version .. ".tar.bz2")
-			sh("tar -xjf /tmp/busybox-" .. pkg.version .. ".tar.bz2 -C /tmp")
+			local url = "https://github.com/mirror/busybox/archive/refs/tags/" .. pkg.version .. ".tar.gz"
+			curl(url, "/tmp/busybox-" .. pkg.version .. ".tar.gz")
+			sh("tar -xzf /tmp/busybox-" .. pkg.version .. ".tar.gz -C /tmp")
 		end)
 
 		hook("build")(function()
@@ -90,11 +90,12 @@ function pkg.binary()
 			end
 
 			print("Downloading BusyBox binary...")
-			local url = "https://busybox.net/downloads/binaries/"
-				.. pkg.version
-				.. "-defconfig-multiarch-musl/busybox-"
+			local url = "https://github.com/docker-library/busybox/raw/dist-"
 				.. busybox_arch
-			curl(url, "/tmp/busybox-binary")
+				.. "/stable/glibc/busybox.tar.xz"
+			curl(url, "/tmp/busybox-binary.tar.xz")
+			sh("tar -xJf /tmp/busybox-binary.tar.xz -C /tmp")
+			sh("cp /tmp/bin/busybox /tmp/busybox-binary")
 		end)
 
 		hook("install")(function()
@@ -147,7 +148,7 @@ function pkg.uninstall()
 
 		hook("post_uninstall")(function()
 			print("Cleanup...")
-			sh("rm -f /tmp/busybox-applets.txt /tmp/busybox-binary /tmp/busybox-*.tar.bz2")
+			sh("rm -f /tmp/busybox-applets.txt /tmp/busybox-binary /tmp/busybox-*.tar.gz /tmp/busybox-*.tar.xz")
 			print("")
 			print(pkg.name .. " has been uninstalled")
 		end)
