@@ -113,7 +113,7 @@ function pkg.binary()
 				.. "/rootfs.tar.gz"
 			curl(url, "/tmp/busybox-binary.tar.gz")
 			sh("sudo tar -xzf /tmp/busybox-binary.tar.gz -C /tmp")
-			sh("cp /tmp/bin/busybox /tmp/busybox-binary")
+			sh("sudo cp /tmp/bin/busybox /tmp/busybox-binary")
 		end)
 
 		hook("install")(function()
