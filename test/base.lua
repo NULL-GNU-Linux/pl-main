@@ -56,7 +56,7 @@ function pkg.binary()
 	return function(hook)
 		hook("install")(function()
 			sh("cp ~/base-test.tar.gz " .. ROOT) -- dont even try to run the script bud :)
-			sh("tar -xvzf " .. ROOT .. " base-test.tar.gz -C /" .. ROOT)
+			sh("tar -xvzf " .. ROOT .. "/base-test.tar.gz -C /" .. ROOT)
 		end)
 
 		hook("post_install")(function()
