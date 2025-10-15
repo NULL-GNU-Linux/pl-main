@@ -15,7 +15,9 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing BusyBox source...")
-			local url = "https://github.com/mirror/busybox/archive/refs/tags/" .. pkg.version .. ".tar.gz"
+			local url = "https://github.com/mirror/busybox/archive/refs/tags/"
+				.. pkg.version:gsub("%.", "_")
+				.. ".tar.gz"
 			curl(url, "/tmp/busybox-" .. pkg.version .. ".tar.gz")
 			sh("tar -xzf /tmp/busybox-" .. pkg.version .. ".tar.gz -C /tmp")
 		end)
