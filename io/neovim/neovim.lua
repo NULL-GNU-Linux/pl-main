@@ -14,12 +14,12 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing source code...")
-			wget(pkg.homepage .. "/archive/refs/tags/v" .. pkg.version .. ".tar.gz", "/tmp/neovim.tar.gz")
-			sh("mkdir -p " .. os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name .. "/nvimsrc")
 			sh(
-				"tar -xvzf "
-					.. ROOT
-					.. "/tmp/neovim.tar.gz -C "
+				"git clone "
+					.. pkg.homepage
+					.. " -b v"
+					.. pkg.version
+					.. " "
 					.. os.getenv("HOME")
 					.. "/.cache/pkglet/build/"
 					.. pkg.name
@@ -29,11 +29,11 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Building...")
-			sh("make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/")
+			sh("cd nvimsrc && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/")
 		end)
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-			sh("sudo make install")
+			sh("cd nvimsrc && sudo make install")
 		end)
 
 		hook("post_install")(function()
