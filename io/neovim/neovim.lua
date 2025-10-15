@@ -14,7 +14,7 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing source code...")
-			curl(pkg.homepage .. "/archive/refs/tags/v" .. pkg.version .. ".tar.gz", "/tmp/neovim.tar.gz")
+			wget(pkg.homepage .. "/archive/refs/tags/v" .. pkg.version .. ".tar.gz", "/tmp/neovim.tar.gz")
 			sh("mkdir -p " .. os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name .. "/nvimsrc")
 			sh(
 				"tar -xvzf "
