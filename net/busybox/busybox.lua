@@ -38,7 +38,7 @@ function pkg.source()
 			)
 			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
 			print("Building BusyBox...")
-			os.execute("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make -j$(nproc)")
+			os.execute("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make CC=musl-gcc -j$(nproc)")
 		end)
 
 		hook("pre_install")(function()
