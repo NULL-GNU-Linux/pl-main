@@ -94,7 +94,7 @@ function pkg.binary()
 			print("Detected architecture: " .. arch)
 
 			local arch_map = {
-				x86_64 = "x86_64",
+				x86_64 = "amd64",
 				aarch64 = "armv8l",
 				armv7l = "armv7l",
 				i686 = "i686",
