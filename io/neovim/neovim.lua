@@ -70,7 +70,7 @@ function pkg.binary()
 		hook("install")(function()
 			print("Installing binary files...")
 
-			sh("tar -xzf /tmp/nvim-binary.tar.gz -C " .. ROOT .. "/usr/")
+			sh("tar -xzf " .. ROOT .. "/tmp/nvim-binary.tar.gz -C " .. ROOT .. "/usr/")
 			table.insert(pkg.files, ROOT .. "/usr/")
 		end)
 
