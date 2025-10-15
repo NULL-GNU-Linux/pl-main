@@ -118,7 +118,7 @@ function pkg.binary()
 
 		hook("install")(function()
 			print("Installing binary files...")
-			install("../../../../../../../tmp/busybox-binary", "/usr/bin/busybox", "755")
+			install("../../../../../../../../../tmp/busybox-binary", "/usr/bin/busybox", "755")
 			table.insert(pkg.files, ROOT .. "/usr/bin/busybox")
 			print("Creating symlinks for applets...")
 			sh(
