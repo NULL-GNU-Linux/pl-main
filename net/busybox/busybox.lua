@@ -42,7 +42,11 @@ function pkg.source()
 
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-			install("/tmp/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", "/usr/bin/busybox", "755")
+			install(
+				"../../../../../../tmp/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", -- a very weird way of getting to /
+				"/usr/bin/busybox",
+				"755"
+			)
 			sh("chown root:root " .. ROOT .. "/usr/bin/busybox")
 
 			print("Creating symlinks for applets...")
