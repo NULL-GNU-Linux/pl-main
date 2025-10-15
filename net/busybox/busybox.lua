@@ -106,20 +106,20 @@ function pkg.binary()
 			end
 
 			print("Downloading BusyBox binary...")
-			local url = "https://github.com/docker-library/busybox/raw/dist-"
+			local url = "https://github.com/docker-library/busybox/raw/refs/heads/dist-"
 				.. busybox_arch
-				.. "/stable/glibc/busybox.tar.xz"
-			curl(url, "/tmp/busybox-binary.tar.xz")
-			sh("tar -xJf /tmp/busybox-binary.tar.xz -C /tmp")
+				.. "/latest/musl/"
+				.. busybox_arch
+				.. "/rootfs.tar.gz"
+			curl(url, "/tmp/busybox-binary.tar.gz")
+			sh("tar -xzf /tmp/busybox-binary.tar.gz -C /tmp")
 			sh("cp /tmp/bin/busybox /tmp/busybox-binary")
 		end)
 
 		hook("install")(function()
 			print("Installing binary files...")
 			install("/tmp/busybox-binary", "/usr/bin/busybox", "755")
-			sh("chown root:root " .. ROOT .. "/usr/bin/busybox")
 			table.insert(pkg.files, ROOT .. "/usr/bin/busybox")
-
 			print("Creating symlinks for applets...")
 			sh(
 				ROOT
