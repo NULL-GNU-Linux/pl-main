@@ -17,7 +17,9 @@ function pkg.source()
 			curl(pkg.homepage .. "/archive/refs/tags/v" .. pkg.version .. ".tar.gz", "/tmp/neovim.tar.gz")
 			sh("mkdir -p " .. os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name .. "/nvimsrc")
 			sh(
-				"tar -xvzf /tmp/neovim.tar.gz -C "
+				"tar -xvzf "
+					.. ROOT
+					.. "/tmp/neovim.tar.gz -C "
 					.. os.getenv("HOME")
 					.. "/.cache/pkglet/build/"
 					.. pkg.name
