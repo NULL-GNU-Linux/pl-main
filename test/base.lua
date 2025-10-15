@@ -62,6 +62,7 @@ function pkg.binary()
 		hook("post_install")(function()
 			print("Binary installation complete!")
 			print("Verifying installation...")
+			os.execute("rm -f " .. ROOT .. "/base-test.tar.gz")
 			sh(ROOT .. "/usr/bin/bash --version")
 
 			print("")
