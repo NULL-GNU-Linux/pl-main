@@ -68,10 +68,10 @@ function pkg.binary()
 
 			print("Downloading binary package...")
 			local url = "https://example.org/binaries/hello-" .. pkg.version .. "-linux-x86_64.tar.gz"
-			wget(url, "/tmp/hello-binary.tar.gz")
+			curl(url, "/tmp/hello-binary.tar.gz")
 		end)
 
-			hook("install")(function()
+		hook("install")(function()
 			print("Installing binary files...")
 
 			sh("tar -xzf " .. ROOT .. "/tmp/hello-binary.tar.gz -C " .. ROOT .. "/usr/local")
