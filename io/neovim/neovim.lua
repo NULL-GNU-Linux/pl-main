@@ -17,7 +17,7 @@ function pkg.source()
 			sh(
 				"git clone "
 					.. pkg.homepage
-					.. " -b v"
+					.. " --depth=1 -b v"
 					.. pkg.version
 					.. " "
 					.. os.getenv("HOME")
