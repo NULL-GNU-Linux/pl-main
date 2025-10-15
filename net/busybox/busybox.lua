@@ -26,7 +26,7 @@ function pkg.source()
 			print("Configuring BusyBox...")
 			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make defconfig")
 			print("Building BusyBox...")
-			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make -j$(nproc)")
+			os.execute("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make -j$(nproc)")
 		end)
 
 		hook("pre_install")(function()
