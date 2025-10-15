@@ -12,43 +12,10 @@ pkg = {
 }
 function pkg.source()
 	return function(hook)
-		hook("prepare")(function()
-			print("Preparing source code...")
-			sh(
-				"git clone "
-					.. pkg.homepage
-					.. " --depth=1 -b v"
-					.. pkg.version
-					.. " "
-					.. os.getenv("HOME")
-					.. "/.cache/pkglet/build/"
-					.. pkg.name
-					.. "/nvimsrc"
-			)
-		end)
-
-		hook("build")(function()
-			print("Building...")
-			sh("cd nvimsrc && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/")
-		end)
-		hook("install")(function()
-			print("Installing " .. pkg.name .. " " .. pkg.version)
-			sh("cd nvimsrc && sudo make CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/ install")
-		end)
-
-		hook("post_install")(function()
-			print("Post-installation setup...")
-			print("")
-			print(
-				"╔════════════════════════════════════════╗"
-			)
-			print("║  " .. pkg.provides[1] .. " installed!          ║")
-			print("║  Version: " .. pkg.version .. "                        ║")
-			print(
-				"╚════════════════════════════════════════╝"
-			)
-			print("")
-		end)
+		hook("prepare")(function() end)
+		hook("build")(function() end)
+		hook("install")(function() end)
+		hook("post_install")(function() end)
 	end
 end
 
