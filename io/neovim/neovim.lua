@@ -68,9 +68,17 @@ function pkg.binary()
 		end)
 
 		hook("install")(function()
+			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
 			print("Installing binary files...")
 
-			sh("tar -xzf " .. ROOT .. "/tmp/nvim-binary.tar.gz -C " .. ROOT .. "/usr/")
+			sh(
+				"tar -xzf "
+					.. ROOT
+					.. "/tmp/nvim-binary.tar.gz --strip-components=1 -C "
+					.. ROOT
+					.. "/usr/ nvim-linux-"
+					.. arch
+			)
 			table.insert(pkg.files, ROOT .. "/usr/")
 		end)
 
