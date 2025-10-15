@@ -29,7 +29,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring BusyBox...")
-			sh("cp /tmp/busybox-config-" .. pkg.version, "/tmp/busybox-" .. pkg.version:gsub("%.", "_") .. "/.config")
+			sh("cp /tmp/busybox-config-" .. pkg.version .. "/tmp/busybox-" .. pkg.version:gsub("%.", "_") .. "/.config")
 			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
 			print("Building BusyBox...")
 			os.execute("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make -j$(nproc)")
