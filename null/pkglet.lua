@@ -46,7 +46,7 @@ function pkg.binary()
 		end)
 		hook("install")(function()
 			print("Installing binary files...")
-			install("pl", "/usr/bin/pl", "755")
+			install("../../../../../../pl", "/usr/bin/pl", "755")
 			table.insert(pkg.files, ROOT .. "/usr/bin/pl")
 		end)
 
