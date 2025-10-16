@@ -84,7 +84,7 @@ end
 function pkg.binary()
 	return function(hook)
 		hook("pre_install")(function()
-			print("Binary installation for org.lua.lua is not yet supported. please use b/org.lua/lua instead.")
+			print("Binary installation for org.lua.lua is not yet supported. please use b/org.lua.lua instead.")
 			error("Unsupported.")
 		end)
 
