@@ -41,8 +41,8 @@ function pkg.source()
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
 
-			install("../../../../../../" .. tmpdir .. "/" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
-			install("../../../../../../" .. tmpdir .. "/" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
+			install("../../../../../../" .. tmpdir .. "/lua-" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
+			install("../../../../../../" .. tmpdir .. "/lua-" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
 
 			sh("mkdir -p " .. ROOT .. "/usr/include/lua" .. pkg.version:match("^%d+%.%d+"))
 			sh("mkdir -p " .. ROOT .. "/usr/lib")
