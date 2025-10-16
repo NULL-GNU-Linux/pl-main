@@ -40,13 +40,14 @@ function pkg.source()
 end
 
 function pkg.binary()
+	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	return function(hook)
 		hook("prepare")(function()
-			curl("https://raw.githubusercontent.com/NULL-GNU-Linux/pkglet/refs/heads/main/pl", "pl")
+			curl("https://raw.githubusercontent.com/NULL-GNU-Linux/pkglet/refs/heads/main/pl", tmpdir .. "/pl")
 		end)
 		hook("install")(function()
 			print("Installing binary files...")
-			install("pl", "/usr/bin/pl", "755")
+			install(tmpdir .. "/pl", "/usr/bin/pl", "755")
 			table.insert(pkg.files, ROOT .. "/usr/bin/pl")
 		end)
 
