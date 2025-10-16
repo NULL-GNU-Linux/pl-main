@@ -29,7 +29,7 @@ function pkg.source()
 		end)
 
 		hook("install")(function()
-			sh("cd " .. source_dir .. " && make install DESTDIR=" .. shell_escape(ROOT))
+			sh("cd " .. source_dir .. " && make install DESTDIR=" .. ROOT)
 		end)
 	end
 end
