@@ -59,7 +59,7 @@ function pkg.source()
 					.. pkg.version:match("^%d+%.%d+")
 					.. "/"
 			)
-			sh("cp /tmp/lua-" .. pkg.version .. "/src/liblua.a " .. ROOT .. "/usr/lib/")
+			sh("cp " .. tmpdir .. "/lua-" .. pkg.version .. "/src/liblua.a " .. ROOT .. "/usr/lib/")
 
 			table.insert(pkg.files, ROOT .. "/usr/bin/lua")
 			table.insert(pkg.files, ROOT .. "/usr/bin/luac")
