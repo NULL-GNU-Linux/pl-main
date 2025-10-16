@@ -77,7 +77,6 @@ function pkg.source()
 				"╚════════════════════════════════════════╝"
 			)
 			print("")
-			sh(ROOT .. "/usr/bin/lua -v")
 		end)
 	end
 end
