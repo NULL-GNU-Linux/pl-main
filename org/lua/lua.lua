@@ -16,8 +16,8 @@ function pkg.source()
 		hook("prepare")(function()
 			print("Preparing Lua source...")
 			local url = "https://www.lua.org/ftp/lua-" .. pkg.version .. ".tar.gz"
-			wget(url, "/tmp/lua-" .. pkg.version .. ".tar.gz")
-			sh("tar -xzf /tmp/lua-" .. pkg.version .. ".tar.gz -C /tmp")
+			wget(url, ROOT .. "/lua-" .. pkg.version .. ".tar.gz")
+			sh("tar -xzf " .. ROOT .. "/lua-" .. pkg.version .. ".tar.gz -C /tmp")
 		end)
 
 		hook("build")(function()
