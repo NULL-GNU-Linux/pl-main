@@ -12,18 +12,19 @@ pkg = {
 }
 
 function pkg.source()
+	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing Lua source...")
 			local url = "https://www.lua.org/ftp/lua-" .. pkg.version .. ".tar.gz"
-			wget(url, "/tmp/lua-" .. pkg.version .. ".tar.gz")
-			sh("tar -xzf /tmp/lua-" .. pkg.version .. ".tar.gz -C /tmp")
+			wget(url, tmpdir .. "/lua-" .. pkg.version .. ".tar.gz")
+			sh("tar -xzf " .. tmpdir .. "/lua-" .. pkg.version .. ".tar.gz -C /tmp")
 		end)
 
 		hook("build")(function()
 			print("Building Lua...")
 			local make_opts = "MYCFLAGS='-fPIC' MYLDFLAGS='-static' -j$(nproc)"
-			os.execute("cd /tmp/lua-" .. pkg.version .. " && make linux " .. make_opts)
+			os.execute("cd " .. tmpdir .. "/lua-" .. pkg.version .. " && make linux " .. make_opts)
 		end)
 
 		hook("pre_install")(function()
@@ -40,15 +41,17 @@ function pkg.source()
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
 
-			install("../../../../../../tmp/lua-" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
-			install("../../../../../../tmp/lua-" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
+			install("../../../../../../" .. tmpdir .. "/" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
+			install("../../../../../../" .. tmpdir .. "/" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
 
 			sh("mkdir -p " .. ROOT .. "/usr/include/lua" .. pkg.version:match("^%d+%.%d+"))
 			sh("mkdir -p " .. ROOT .. "/usr/lib")
 			sh("mkdir -p " .. ROOT .. "/usr/share/lua/" .. pkg.version:match("^%d+%.%d+"))
 
 			sh(
-				"cp /tmp/lua-"
+				"cp "
+					.. tmpdir
+					.. "/lua-"
 					.. pkg.version
 					.. "/src/*.h "
 					.. ROOT
