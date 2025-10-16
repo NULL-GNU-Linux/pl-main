@@ -24,7 +24,11 @@ function pkg.source()
 
 		hook("build")(function()
 			sh("cd " .. source_dir .. " && make configure")
-			sh("cd " .. source_dir .. " && ./configure --prefix=/usr --with-openssl --with-curl --with-expat")
+			sh(
+				"cd "
+					.. source_dir
+					.. ' && ./configure LDFLAGS="-static" NO_SHARED=1 --prefix=/usr --with-openssl --with-curl --with-expat'
+			)
 			sh("cd " .. source_dir .. " && make")
 		end)
 
