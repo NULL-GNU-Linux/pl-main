@@ -31,15 +31,21 @@ function pkg.source()
 		hook("build")(function()
 			print("Configuring BusyBox...")
 			sh(
-				"cp " .. tmpdir .. "/busybox-config-"
+				"cp "
+					.. tmpdir
+					.. "/busybox-config-"
 					.. pkg.version
-					.. " " .. tmpdir .. "/busybox-"
+					.. " "
+					.. tmpdir
+					.. "/busybox-"
 					.. pkg.version:gsub("%.", "_")
 					.. "/.config"
 			)
 			sh("cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
 			print("Building BusyBox...")
-			os.execute("cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. " && make CC=musl-gcc -j$(nproc)")
+			os.execute(
+				"cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. " && make CC=musl-gcc -j$(nproc)"
+			)
 		end)
 
 		hook("pre_install")(function()
@@ -145,7 +151,12 @@ function pkg.uninstall()
 		hook("pre_uninstall")(function()
 			print("Preparing to uninstall " .. pkg.name)
 			print("Backing up applet list...")
-			sh(ROOT .. "/usr/bin/busybox --list > " .. tmpdir .. "/busybox-applets.txt 2>/dev/null || true")
+			sh(
+				ROOT
+					.. '/usr/bin/busybox --list | grep -v "busybox" > '
+					.. tmpdir
+					.. "/busybox-applets.txt 2>/dev/null || true"
+			)
 		end)
 
 		hook("uninstall")(function()
@@ -153,9 +164,13 @@ function pkg.uninstall()
 
 			print("Removing applet symlinks...")
 			sh(
-				"if [ -f " .. tmpdir .. "/busybox-applets.txt ]; then while read applet; do rm -f "
+				"if [ -f "
+					.. tmpdir
+					.. "/busybox-applets.txt ]; then while read applet; do rm -f "
 					.. ROOT
-					.. "/usr/bin/$applet 2>/dev/null || true; done < " .. tmpdir .. "/busybox-applets.txt; fi"
+					.. "/usr/bin/$applet 2>/dev/null || true; done < "
+					.. tmpdir
+					.. "/busybox-applets.txt; fi"
 			)
 
 			print("Removing busybox binary...")
@@ -164,7 +179,17 @@ function pkg.uninstall()
 
 		hook("post_uninstall")(function()
 			print("Cleanup...")
-			sh("rm -f " .. tmpdir .. "/busybox-applets.txt " .. tmpdir .. "/busybox-binary " .. tmpdir .. "/busybox-*.tar.gz " .. tmpdir .. "/busybox-*.tar.xz")
+			sh(
+				"rm -f "
+					.. tmpdir
+					.. "/busybox-applets.txt "
+					.. tmpdir
+					.. "/busybox-binary "
+					.. tmpdir
+					.. "/busybox-*.tar.gz "
+					.. tmpdir
+					.. "/busybox-*.tar.xz"
+			)
 			print("")
 			print(pkg.name .. " has been uninstalled")
 		end)
