@@ -12,33 +12,34 @@ pkg = {
 }
 
 function pkg.source()
+	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing config file...")
 			wget(
 				"https://raw.githubusercontent.com/NULL-GNU-Linux/busybox/refs/heads/main/" .. pkg.version,
-				"/tmp/busybox-config-" .. pkg.version
+				tmpdir .. "/busybox-config-" .. pkg.version
 			)
 			print("Preparing BusyBox source...")
 			local url = "https://github.com/mirror/busybox/archive/refs/tags/"
 				.. pkg.version:gsub("%.", "_")
 				.. ".tar.gz"
-			wget(url, "/tmp/busybox-" .. pkg.version .. ".tar.gz")
-			sh("tar -xzf /tmp/busybox-" .. pkg.version .. ".tar.gz -C /tmp")
+			wget(url, tmpdir .. "/busybox-" .. pkg.version .. ".tar.gz")
+			sh("tar -xzf " .. tmpdir .. "/busybox-" .. pkg.version .. ".tar.gz -C " .. tmpdir)
 		end)
 
 		hook("build")(function()
 			print("Configuring BusyBox...")
 			sh(
-				"cp /tmp/busybox-config-"
+				"cp " .. tmpdir .. "/busybox-config-"
 					.. pkg.version
-					.. " /tmp/busybox-"
+					.. " " .. tmpdir .. "/busybox-"
 					.. pkg.version:gsub("%.", "_")
 					.. "/.config"
 			)
-			sh("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
+			sh("cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
 			print("Building BusyBox...")
-			os.execute("cd /tmp/busybox-" .. pkg.version:gsub("%.", "_") .. " && make CC=musl-gcc -j$(nproc)")
+			os.execute("cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. " && make CC=musl-gcc -j$(nproc)")
 		end)
 
 		hook("pre_install")(function()
@@ -55,7 +56,7 @@ function pkg.source()
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
 			install(
-				"../../../../../../tmp/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", -- a very weird way of getting to /
+				"../../../../../../" .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", -- a very weird way of getting to /
 				"/usr/bin/busybox",
 				"755"
 			)
@@ -111,14 +112,14 @@ function pkg.binary()
 				.. "/latest/musl/"
 				.. busybox_arch
 				.. "/rootfs.tar.gz"
-			curl(url, "/tmp/busybox-binary.tar.gz")
-			sh("sudo tar -xzf /tmp/busybox-binary.tar.gz -C /tmp")
-			sh("sudo cp /tmp/bin/busybox /tmp/busybox-binary")
+			curl(url, tmpdir .. "/busybox-binary.tar.gz")
+			sh("sudo tar -xzf " .. tmpdir .. "/busybox-binary.tar.gz -C " .. tmpdir)
+			sh("sudo cp " .. tmpdir .. "/bin/busybox " .. tmpdir .. "/busybox-binary")
 		end)
 
 		hook("install")(function()
 			print("Installing binary files...")
-			install("../../../../../../../../../tmp/busybox-binary", "/usr/bin/busybox", "755")
+			install("../../../../../../../../../" .. tmpdir .. "/busybox-binary", "/usr/bin/busybox", "755")
 			table.insert(pkg.files, ROOT .. "/usr/bin/busybox")
 			print("Creating symlinks for applets...")
 			sh(
@@ -144,7 +145,7 @@ function pkg.uninstall()
 		hook("pre_uninstall")(function()
 			print("Preparing to uninstall " .. pkg.name)
 			print("Backing up applet list...")
-			sh(ROOT .. "/usr/bin/busybox --list > /tmp/busybox-applets.txt 2>/dev/null || true")
+			sh(ROOT .. "/usr/bin/busybox --list > " .. tmpdir .. "/busybox-applets.txt 2>/dev/null || true")
 		end)
 
 		hook("uninstall")(function()
@@ -152,9 +153,9 @@ function pkg.uninstall()
 
 			print("Removing applet symlinks...")
 			sh(
-				"if [ -f /tmp/busybox-applets.txt ]; then while read applet; do rm -f "
+				"if [ -f " .. tmpdir .. "/busybox-applets.txt ]; then while read applet; do rm -f "
 					.. ROOT
-					.. "/usr/bin/$applet 2>/dev/null || true; done < /tmp/busybox-applets.txt; fi"
+					.. "/usr/bin/$applet 2>/dev/null || true; done < " .. tmpdir .. "/busybox-applets.txt; fi"
 			)
 
 			print("Removing busybox binary...")
@@ -163,7 +164,7 @@ function pkg.uninstall()
 
 		hook("post_uninstall")(function()
 			print("Cleanup...")
-			sh("rm -f /tmp/busybox-applets.txt /tmp/busybox-binary /tmp/busybox-*.tar.gz /tmp/busybox-*.tar.xz")
+			sh("rm -f " .. tmpdir .. "/busybox-applets.txt " .. tmpdir .. "/busybox-binary " .. tmpdir .. "/busybox-*.tar.gz " .. tmpdir .. "/busybox-*.tar.xz")
 			print("")
 			print(pkg.name .. " has been uninstalled")
 		end)
@@ -175,7 +176,7 @@ function pkg.upgrade()
 		print("Upgrading BusyBox from " .. from_version .. " to " .. pkg.version)
 
 		print("Backing up current applet list...")
-		sh(ROOT .. "/usr/bin/busybox --list > /tmp/busybox-applets-old.txt 2>/dev/null || true")
+		sh(ROOT .. "/usr/bin/busybox --list > " .. tmpdir .. "/busybox-applets-old.txt 2>/dev/null || true")
 
 		print("Upgrade preparation complete")
 	end
