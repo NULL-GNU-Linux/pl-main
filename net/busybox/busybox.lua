@@ -135,7 +135,6 @@ function pkg.binary()
 			sh(ROOT .. "/usr/bin/busybox --help | head -n 1")
 			print("")
 			print("Installation successful!")
-			print("BusyBox provides " .. sh(ROOT .. "/usr/bin/busybox --list | wc -l") .. " applets")
 		end)
 	end
 end
