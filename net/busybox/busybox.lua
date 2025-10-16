@@ -130,7 +130,7 @@ function pkg.binary()
 			print("Creating symlinks for applets...")
 			sh(
 				ROOT
-					.. "/usr/bin/busybox --list | while read applet; do ln -sf /usr/bin/busybox "
+					.. '/usr/bin/busybox --list | grep -xv "busybox" | while read applet; do ln -sf /usr/bin/busybox '
 					.. ROOT
 					.. "/usr/bin/$applet 2>/dev/null || true; done"
 			)
@@ -153,7 +153,7 @@ function pkg.uninstall()
 			print("Backing up applet list...")
 			sh(
 				ROOT
-					.. '/usr/bin/busybox --list | grep -v "busybox" > '
+					.. '/usr/bin/busybox --list | grep -xv "busybox" > '
 					.. tmpdir
 					.. "/busybox-applets.txt 2>/dev/null || true"
 			)
