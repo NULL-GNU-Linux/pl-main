@@ -45,8 +45,8 @@ function pkg.source()
 		hook("install")(function()
 			print("Installing musl libc...")
 			sh("cd " .. tmpdir .. "/musl-" .. pkg.version .. " && make install")
-			table.insert(pkg.files, ROOT .. "/usr/local/lib/libc.so")
-			table.insert(pkg.files, ROOT .. "/usr/local/include/")
+			table.insert(pkg.files, ROOT .. "/usr/lib/libc.so")
+			table.insert(pkg.files, ROOT .. "/usr/include/")
 		end)
 
 		hook("post_install")(function()
@@ -59,7 +59,7 @@ function pkg.source()
 			print(
 				"╚════════════════════════════════╝"
 			)
-			sh(ROOT .. "/usr/local/bin/musl-gcc --version | head -n 1")
+			sh(ROOT .. "/usr/bin/musl-gcc --version | head -n 1")
 		end)
 	end
 end
@@ -72,8 +72,8 @@ function pkg.uninstall()
 
 		hook("uninstall")(function()
 			print("Removing musl libc files...")
-			sh("rm -rf " .. ROOT .. "/usr/local/lib/libc.so*")
-			sh("rm -rf " .. ROOT .. "/usr/local/include/*")
+			sh("rm -rf " .. ROOT .. "/usr/lib/libc.so*")
+			sh("rm -rf " .. ROOT .. "/usr/include/*")
 		end)
 
 		hook("post_uninstall")(function()
