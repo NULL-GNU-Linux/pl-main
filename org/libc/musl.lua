@@ -64,6 +64,62 @@ function pkg.source()
 	end
 end
 
+function pkg.binary()
+	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
+	return function(hook)
+		hook("pre_install")(function()
+			if ROOT == "" then
+				error("Bootstrap mode required for musl libc.")
+			end
+			print("Preparing binary installation for musl libc...")
+			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
+			print("Detected architecture: " .. arch)
+			local arch_map = {
+				x86_64 = "x86_64",
+				aarch64 = "aarch64",
+				armv7l = "armv7l",
+				i686 = "i686",
+			}
+
+			local musl_arch = arch_map[arch]
+			if not musl_arch then
+				error("Binary package not available for architecture: " .. arch)
+			end
+
+			print("Downloading musl prebuilt binary...")
+			local url = "https://musl.cc/" .. musl_arch .. "-musl-cross.tgz"
+			curl(url, tmpdir .. "/musl-" .. musl_arch .. ".tar.gz")
+			print("Extracting musl binary...")
+			sh(
+				"mkdir -p "
+					.. tmpdir
+					.. "/musl && tar -xzf "
+					.. tmpdir
+					.. "/musl-"
+					.. musl_arch
+					.. ".tar.gz -C "
+					.. tmpdir
+					.. "/musl"
+			)
+		end)
+
+		hook("install")(function()
+			print("Installing musl binary to /usr...")
+			sh("cp -r " .. tmpdir .. "/musl/bin/* " .. ROOT .. "/usr/bin/")
+			sh("cp -r " .. tmpdir .. "/musl/lib/* " .. ROOT .. "/usr/lib/")
+			sh("cp -r " .. tmpdir .. "/musl/include/* " .. ROOT .. "/usr/include/")
+			table.insert(pkg.files, ROOT .. "/usr/bin/musl-gcc")
+			table.insert(pkg.files, ROOT .. "/usr/lib/libc.so")
+			table.insert(pkg.files, ROOT .. "/usr/include/")
+		end)
+
+		hook("post_install")(function()
+			print("Binary musl libc installation complete!")
+			sh(ROOT .. "/usr/bin/musl-gcc --version | head -n 1")
+		end)
+	end
+end
+
 function pkg.uninstall()
 	return function(hook)
 		hook("pre_uninstall")(function()
@@ -72,6 +128,7 @@ function pkg.uninstall()
 
 		hook("uninstall")(function()
 			print("Removing musl libc files...")
+			sh("rm -rf " .. ROOT .. "/usr/bin/musl-gcc")
 			sh("rm -rf " .. ROOT .. "/usr/lib/libc.so*")
 			sh("rm -rf " .. ROOT .. "/usr/include/*")
 		end)
