@@ -93,7 +93,7 @@ function pkg.binary()
 			sh(
 				"mkdir -p "
 					.. tmpdir
-					.. "/musl && tar -xzf "
+					.. "/musl && tar --strip-components=1 -xzf "
 					.. tmpdir
 					.. "/musl-"
 					.. musl_arch
