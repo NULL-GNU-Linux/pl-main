@@ -66,13 +66,15 @@ function pkg.source()
 				"/usr/bin/busybox",
 				"755"
 			)
-			print("Creating symlinks for applets...")
-			sh(
-				ROOT
-					.. '/usr/bin/busybox --list | grep -xv "busybox" | while read applet; do ln -sf /usr/bin/busybox '
-					.. ROOT
-					.. "/usr/bin/$applet 2>/dev/null || true; done"
-			)
+			if not OPTIONS.no_symlinks then
+				print("Creating symlinks for applets...")
+				sh(
+					ROOT
+						.. '/usr/bin/busybox --list | grep -xv "busybox" | while read applet; do ln -sf /usr/bin/busybox '
+						.. ROOT
+						.. "/usr/bin/$applet 2>/dev/null || true; done"
+				)
+			end
 			table.insert(pkg.files, ROOT .. "/usr/bin/busybox")
 		end)
 
