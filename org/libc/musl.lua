@@ -44,7 +44,7 @@ function pkg.source()
 
 		hook("install")(function()
 			print("Installing musl libc...")
-			sh("cd " .. tmpdir .. "/musl-" .. pkg.version .. " && make install")
+			sh("cd " .. tmpdir .. "/musl-" .. pkg.version .. " && sudo make install")
 			table.insert(pkg.files, ROOT .. "/usr/lib/libc.so")
 			table.insert(pkg.files, ROOT .. "/usr/include/")
 		end)
