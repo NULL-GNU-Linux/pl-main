@@ -107,7 +107,7 @@ function pkg.binary()
 			print("Installing musl binary to /usr...")
 			sh("cp -r " .. tmpdir .. "/musl/bin/* " .. ROOT .. "/usr/bin/")
 			sh("cp -r " .. tmpdir .. "/musl/lib/* " .. ROOT .. "/usr/lib/")
-			sh("cp -r " .. tmpdir .. "/musl/include/* " .. ROOT .. "/usr/include/")
+			sh("cp -r " .. tmpdir .. "/musl/*-linux-musl/* " .. ROOT .. "/") -- very weird way of all architectures and all those extra stuff
 			table.insert(pkg.files, ROOT .. "/usr/bin/musl-gcc")
 			table.insert(pkg.files, ROOT .. "/usr/lib/libc.so")
 			table.insert(pkg.files, ROOT .. "/usr/include/")
