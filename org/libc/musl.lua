@@ -59,7 +59,6 @@ function pkg.source()
 			print(
 				"╚════════════════════════════════╝"
 			)
-			sh(ROOT .. "/usr/bin/musl-gcc --version | head -n 1")
 		end)
 	end
 end
@@ -115,7 +114,7 @@ function pkg.binary()
 
 		hook("post_install")(function()
 			print("Binary musl libc installation complete!")
-			sh(ROOT .. "/usr/bin/musl-gcc --version | head -n 1")
+			sh(ROOT .. "/usr/bin/gcc --version | head -n 1")
 		end)
 	end
 end
