@@ -86,7 +86,7 @@ function pkg.binary()
 			end
 
 			print("Downloading musl prebuilt binary...")
-			local url = "https://musl.cc/" .. musl_arch .. "-linux-musl-cross.tgz"
+			local url = "https://musl.cc/" .. musl_arch .. "-linux-musl-native.tgz"
 			curl(url, tmpdir .. "/musl-" .. musl_arch .. ".tar.gz")
 			print("Extracting musl binary...")
 			sh(
