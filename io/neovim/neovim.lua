@@ -50,6 +50,7 @@ function pkg.source()
 end
 
 function pkg.binary()
+	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for " .. pkg.name)
@@ -61,7 +62,7 @@ function pkg.binary()
 				.. "/nvim-linux-"
 				.. arch
 				.. ".tar.gz"
-			curl(url, "/tmp/nvim-binary.tar.gz")
+			curl(url, tmpdir .. "/nvim-binary.tar.gz")
 		end)
 
 		hook("install")(function()
@@ -70,8 +71,8 @@ function pkg.binary()
 
 			sh(
 				"tar -xzf "
-					.. ROOT
-					.. "/tmp/nvim-binary.tar.gz --strip-components=1 -C "
+					.. tmpdir
+					.. "/nvim-binary.tar.gz --strip-components=1 -C "
 					.. ROOT
 					.. "/usr/ nvim-linux-"
 					.. arch
