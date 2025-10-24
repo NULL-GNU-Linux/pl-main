@@ -11,6 +11,7 @@ pkg = {
 	files = {},
 }
 function pkg.source()
+	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing source code...")
@@ -20,21 +21,17 @@ function pkg.source()
 					.. " --depth=1 -b v"
 					.. pkg.version
 					.. " "
-					.. os.getenv("HOME")
-					.. "/.cache/pkglet/build/"
-					.. pkg.name
+					.. tmpdir
 					.. "/nvimsrc"
 			)
 		end)
 
-		hook("build")(function()
-			print("Building...")
-			sh("cd nvimsrc && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/")
-		end)
-		hook("install")(function()
-			print("Installing " .. pkg.name .. " " .. pkg.version)
-			sh("cd nvimsrc && sudo make CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/ install")
-		end)
+					hook("build")(function()
+					print("Building...")
+					sh("cd " .. tmpdir .. "/nvimsrc && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/")		end)
+					hook("install")(function()
+					print("Installing " .. pkg.name .. " " .. pkg.version)
+					sh("cd " .. tmpdir .. "/nvimsrc && sudo make CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/ install")		end)
 
 		hook("post_install")(function()
 			print("Post-installation setup...")
