@@ -40,14 +40,11 @@ function pkg.source()
 
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-
-			install("../../../../../../" .. tmpdir .. "/lua-" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
-			install("../../../../../../" .. tmpdir .. "/lua-" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
-
+			install("/" .. tmpdir .. "/lua-" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
+			install("/" .. tmpdir .. "/lua-" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
 			sh("mkdir -p " .. ROOT .. "/usr/include/lua" .. pkg.version:match("^%d+%.%d+"))
 			sh("mkdir -p " .. ROOT .. "/usr/lib")
 			sh("mkdir -p " .. ROOT .. "/usr/share/lua/" .. pkg.version:match("^%d+%.%d+"))
-
 			sh(
 				"cp "
 					.. tmpdir
@@ -60,7 +57,6 @@ function pkg.source()
 					.. "/"
 			)
 			sh("cp " .. tmpdir .. "/lua-" .. pkg.version .. "/src/liblua.a " .. ROOT .. "/usr/lib/")
-
 			table.insert(pkg.files, ROOT .. "/usr/bin/lua")
 			table.insert(pkg.files, ROOT .. "/usr/bin/luac")
 		end)
@@ -90,9 +86,8 @@ function pkg.binary()
 
 		hook("install")(function()
 			print("Installing binary files...")
-			install("../../../../../../../../../tmp/lua-" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
-			install("../../../../../../../../../tmp/lua-" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
-
+			install("/tmp/lua-" .. pkg.version .. "/src/lua", "/usr/bin/lua", "755")
+			install("/tmp/lua-" .. pkg.version .. "/src/luac", "/usr/bin/luac", "755")
 			table.insert(pkg.files, ROOT .. "/usr/bin/lua")
 			table.insert(pkg.files, ROOT .. "/usr/bin/luac")
 		end)
