@@ -102,15 +102,15 @@ function pkg.binary()
 			print("Detected architecture: " .. arch)
 			print("Downloading Linux prebuilt from our servers...")
 			local url = "https://files.obsidianos.xyz/~neo/null/" .. arch .. "-linux.tar.gz"
-			curl(url, tmpdir .. "/linux-" .. musl_arch .. ".tar.gz")
+			curl(url, tmpdir .. "/linux-" .. arch .. ".tar.gz")
 			print("Extracting Linux...")
 			sh(
 				"mkdir -p "
 					.. tmpdir
-					.. "/musl && tar -xzf "
+					.. "/linux && tar -xzf "
 					.. tmpdir
-					.. "/linux--"
-					.. musl_arch
+					.. "/linux-"
+					.. arch
 					.. ".tar.gz -C "
 					.. tmpdir
 					.. "/linux"
