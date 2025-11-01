@@ -63,7 +63,7 @@ function pkg.source()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
 			install(
 				"../../../../../../" .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", -- a very weird way of getting to /
-				"/usr/bin/busybox",
+				"usr/bin/busybox",
 				"755"
 			)
 			if not OPTIONS.no_symlinks then
@@ -128,7 +128,7 @@ function pkg.binary()
 
 		hook("install")(function()
 			print("Installing binary files...")
-			install("../../../../../../../../../" .. tmpdir .. "/busybox-binary", "/usr/bin/busybox", "755")
+			install("../../../../../../../../../" .. tmpdir .. "/busybox-binary", "usr/bin/busybox", "755")
 			table.insert(pkg.files, ROOT .. "/usr/bin/busybox")
 			print("Creating symlinks for applets...")
 			sh(
