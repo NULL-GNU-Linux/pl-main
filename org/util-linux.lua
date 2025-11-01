@@ -44,14 +44,13 @@ hook("install")(function()
 print("Installing " .. pkg.name .. " " .. pkg.version)
 local build_dir = tmpdir .. "/util-linux-" .. pkg.version
 local out_dir = tmpdir .. "/out"
-sh("cd " .. build_dir .. " && make DESTDIR=" .. out_dir .. " install")
+sh("cd " .. build_dir .. " && sudo make DESTDIR=" .. out_dir .. " install")
 sh("cd " .. out_dir .. " && mkdir -p usr/bin usr/lib")
 sh("cd " .. out_dir .. " && [ -d sbin ] && mv sbin/* bin/ || true")
 sh("cd " .. out_dir .. " && [ -d lib ] && mv lib/* usr/lib/ || true")
 sh("cd " .. out_dir .. " && [ -d bin ] && mv bin/* usr/bin/ || true")
 sh("cd " .. out_dir .. " && [ -d usr/sbin ] && mv usr/sbin/* usr/bin/ || true")
 sh("cp -r " .. out_dir .. "/* " .. ROOT)
-
 local binaries = { "mount", "umount", "fdisk", "mkfs", "blkid", "lsblk", "findmnt", "losetup", "sfdisk", "cfdisk", "partx", "dmesg", "lscpu", "lsmem" }
 for _, bin in ipairs(binaries) do
     table.insert(pkg.files, ROOT .. "/usr/bin/" .. bin)
