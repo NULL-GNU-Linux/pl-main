@@ -86,7 +86,7 @@ if not binutils_arch then
     print("Downloading GNU binutils prebuilt binaries...")
     local url = "https://files.obsidianos.xyz/~neo/null/org.gnu.binutils." .. pkg.version .. ".tar.gz"
     curl(url, tmpdir .. "/binutils-binary.tar.gz")
-    sh("tar -xzvf " .. tmpdir .. "/binutils-binary.tar.gz -C " .. tmpdir .. "/binutils-extract")
+    sh("mkdir -p " .. tmpdir .. "/binutils-extract && " .. "tar -xzvf " .. tmpdir .. "/binutils-binary.tar.gz -C " .. tmpdir .. "/binutils-extract")
     end)
 
 hook("install")(function()
