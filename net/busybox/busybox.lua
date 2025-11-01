@@ -70,7 +70,7 @@ function pkg.source()
 				print("Creating symlinks for applets...")
 				sh(
 					ROOT .. "/usr/bin/busybox --list | grep -xv 'busybox' | while read applet; do " ..
-					"[ ! -e '" .. ROOT .. "/usr/bin/$applet' ] && ln -s /usr/bin/busybox '" .. ROOT .. "/usr/bin/$applet'; " ..
+					"[ ! -e '" .. ROOT .. "/usr/bin/$applet' ] && ln -s /usr/bin/busybox '" .. ROOT .. "/usr/bin/$applet' || true; " ..
 					"done"
 				)
 			end
@@ -132,7 +132,7 @@ function pkg.binary()
 			print("Creating symlinks for applets...")
 			sh(
 				ROOT .. "/usr/bin/busybox --list | grep -xv 'busybox' | while read applet; do " ..
-				"[ ! -e '" .. ROOT .. "/usr/bin/$applet' ] && ln -s /usr/bin/busybox '" .. ROOT .. "/usr/bin/$applet'; " ..
+				"[ ! -e '" .. ROOT .. "/usr/bin/$applet' ] && ln -s /usr/bin/busybox '" .. ROOT .. "/usr/bin/$applet' || true; " ..
 				"done"
 			)
 		end)
