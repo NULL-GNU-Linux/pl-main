@@ -70,15 +70,11 @@ function pkg.binary()
 tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 return function(hook)
 hook("pre_install")(function()
-print("[!] Binary builds unavailable. Building from source...")
 print("Preparing binary installation for " .. pkg.name)
 local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
 print("Detected architecture: " .. arch)
-
 local arch_map = {
     x86_64 = "x86_64",
-    aarch64 = "aarch64",
-    armv7l = "armv7l",
     i686 = "i686",
 }
 
@@ -88,21 +84,16 @@ if not binutils_arch then
     end
 
     print("Downloading GNU binutils prebuilt binaries...")
-    local url = "https://ftp.gnu.org/gnu/binutils/binutils-" .. pkg.version .. ".tar.xz"
-    curl(url, tmpdir .. "/binutils-binary.tar.xz")
-    sh("tar -xJf " .. tmpdir .. "/binutils-binary.tar.xz -C " .. tmpdir)
-
-    local extract_dir = tmpdir .. "/binutils-" .. pkg.version
-    sh("cd " .. extract_dir .. " && ./configure --prefix=" .. tmpdir .. "/binutils-install --disable-werror")
-    sh("cd " .. extract_dir .. " && make -j$(nproc) && make install")
+    local url = "https://files.obsidianos.xyz/~neo/null/org.gnu.binutils." .. pkg.version .. ".tar.gz"
+    curl(url, tmpdir .. "/binutils-binary.tar.gz")
+    sh("tar -xzvf " .. tmpdir .. "/binutils-binary.tar.gz -C " .. tmpdir .. "/binutils-extract")
     end)
 
 hook("install")(function()
 print("Installing...")
 local binaries = { "ld", "as", "ar", "nm", "objdump", "strip", "readelf", "objcopy", "ranlib", "size", "strings", "addr2line", "c++filt", "elfedit", "gprof" }
-
+sh("cp " .. tmpdir .. "/binutils-extract/* " .. ROOT)
 for _, bin in ipairs(binaries) do
-    install(tmpdir .. "/binutils-install/bin/" .. bin, "/usr/bin/" .. bin, "755")
     table.insert(pkg.files, ROOT .. "/usr/bin/" .. bin)
     end
     end)
@@ -126,7 +117,6 @@ end)
 hook("uninstall")(function()
 print("Removing " .. pkg.name .. "...")
 local binaries = { "ld", "as", "ar", "nm", "objdump", "strip", "readelf", "objcopy", "ranlib", "size", "strings", "addr2line", "c++filt", "elfedit", "gprof" }
-
 for _, bin in ipairs(binaries) do
     uninstall("/usr/bin/" .. bin)
     end
