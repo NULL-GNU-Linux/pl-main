@@ -6,8 +6,8 @@ pkg = {
 	license = "MIT",
 	homepage = "https://musl.libc.org",
 	depends = {},
-	conflicts = {},
-	provides = { "musl" },
+	conflicts = { "org.gnu.glibc" },
+	provides = { "musl", "libc", "ld-linux" },
 	files = {},
 }
 
