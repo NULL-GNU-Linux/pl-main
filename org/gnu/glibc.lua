@@ -52,6 +52,7 @@ sh("cd " .. out_dir .. " && [ -d bin ] && sudo mv bin/* usr/bin/ || true")
 sh("cd " .. out_dir .. " && [ -d lib64 ] && sudo mv lib64/* usr/lib64/ || true")
 sh("cd " .. out_dir .. " && [ -d usr/sbin ] && sudo mv usr/sbin/* usr/bin/ || true")
 sh("cp -r " .. out_dir .. "/* " .. ROOT)
+sh("echo \"/usr/lib\" > " .. ROOT .. "/etc/ld.so.conf")
 local libs = { "libc.so.6", "libm.so.6", "libpthread.so.0", "libdl.so.2", "librt.so.1", "libresolv.so.2", "libnss_files.so.2", "libnss_dns.so.2" }
 for _, lib in ipairs(libs) do
     table.insert(pkg.files, ROOT .. "/usr/lib64/" .. lib)
@@ -99,6 +100,7 @@ if not glibc_arch then
 hook("install")(function()
 print("Installing...")
 sh("cp -r " .. tmpdir .. "/glibc-extract/* " .. ROOT)
+sh("echo \"/usr/lib\" > " .. ROOT .. "/etc/ld.so.conf")
 local libs = { "libc.so.6", "libm.so.6", "libpthread.so.0", "libdl.so.2", "librt.so.1", "libresolv.so.2", "libnss_files.so.2", "libnss_dns.so.2" }
 for _, lib in ipairs(libs) do
     table.insert(pkg.files, ROOT .. "/usr/lib64/" .. lib)
