@@ -104,9 +104,9 @@ function pkg.binary()
 
 		hook("install")(function()
 			print("Installing musl binary to /usr...")
-			sh("cp -r " .. tmpdir .. "/musl/bin/* " .. ROOT .. "/usr/bin/")
-			sh("cp -r " .. tmpdir .. "/musl/lib/* " .. ROOT .. "/usr/lib/")
-			sh("cp -r " .. tmpdir .. "/musl/*-linux-musl/* " .. ROOT .. "/usr/") -- very weird way of all architectures and all those extra stuff
+			sh("sudo cp -r " .. tmpdir .. "/musl/bin/* " .. ROOT .. "/usr/bin/")
+			sh("sudo cp -r " .. tmpdir .. "/musl/lib/* " .. ROOT .. "/usr/lib/")
+			sh("sudo cp -r " .. tmpdir .. "/musl/*-linux-musl/* " .. ROOT .. "/usr/") -- very weird way of all architectures and all those extra stuff
 			table.insert(pkg.files, ROOT .. "/usr/bin/musl-gcc")
 			table.insert(pkg.files, ROOT .. "/usr/lib/libc.so")
 			table.insert(pkg.files, ROOT .. "/usr/include/")
