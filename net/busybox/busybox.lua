@@ -69,10 +69,9 @@ function pkg.source()
 			if not OPTIONS.no_symlinks then
 				print("Creating symlinks for applets...")
 				sh(
-					ROOT
-						.. '/usr/bin/busybox --list | grep -xv "busybox" | while read applet; do ln -sf /usr/bin/busybox '
-						.. ROOT
-						.. "/usr/bin/$applet 2>/dev/null || true; done"
+					ROOT .. "/usr/bin/busybox --list | grep -xv 'busybox' | while read applet; do " ..
+					"[ ! -e '" .. ROOT .. "/usr/bin/$applet' ] && ln -s /usr/bin/busybox '" .. ROOT .. "/usr/bin/$applet'; " ..
+					"done"
 				)
 			end
 			table.insert(pkg.files, ROOT .. "/usr/bin/busybox")
