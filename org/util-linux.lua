@@ -25,8 +25,8 @@ hook("build")(function()
 print("Building util-linux...")
 local build_dir = tmpdir .. "/util-linux-" .. pkg.version
 sh("cd " .. build_dir .. " && ./autogen.sh")
-sh("cd " .. build_dir .. " && ./configure --prefix=/usr")
-sh("cd " .. build_dir .. " && make -j$(nproc)")
+sh("cd " .. build_dir .. " && ./configure")
+sh("cd " .. build_dir .. " && sudo make -j$(nproc)")
 end)
 
 hook("pre_install")(function()
@@ -46,10 +46,10 @@ local build_dir = tmpdir .. "/util-linux-" .. pkg.version
 local out_dir = tmpdir .. "/out"
 sh("cd " .. build_dir .. " && sudo make DESTDIR=" .. out_dir .. " install")
 sh("cd " .. out_dir .. " && mkdir -p usr/bin usr/lib")
-sh("cd " .. out_dir .. " && [ -d sbin ] && mv sbin/* bin/ || true")
-sh("cd " .. out_dir .. " && [ -d lib ] && mv lib/* usr/lib/ || true")
-sh("cd " .. out_dir .. " && [ -d bin ] && mv bin/* usr/bin/ || true")
-sh("cd " .. out_dir .. " && [ -d usr/sbin ] && mv usr/sbin/* usr/bin/ || true")
+sh("cd " .. out_dir .. " && [ -d sbin ] && sudo mv sbin/* bin/ || true")
+sh("cd " .. out_dir .. " && [ -d lib ] && sudo mv lib/* usr/lib/ || true")
+sh("cd " .. out_dir .. " && [ -d bin ] && sudo mv bin/* usr/bin/ || true")
+sh("cd " .. out_dir .. " && [ -d usr/sbin ] && sudo mv usr/sbin/* usr/bin/ || true")
 sh("cp -r " .. out_dir .. "/* " .. ROOT)
 local binaries = { "mount", "umount", "fdisk", "mkfs", "blkid", "lsblk", "findmnt", "losetup", "sfdisk", "cfdisk", "partx", "dmesg", "lscpu", "lsmem" }
 for _, bin in ipairs(binaries) do
