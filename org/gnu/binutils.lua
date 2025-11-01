@@ -92,7 +92,7 @@ if not binutils_arch then
 hook("install")(function()
 print("Installing...")
 local binaries = { "ld", "as", "ar", "nm", "objdump", "strip", "readelf", "objcopy", "ranlib", "size", "strings", "addr2line", "c++filt", "elfedit", "gprof" }
-sh("cp " .. tmpdir .. "/binutils-extract/* " .. ROOT)
+sh("cp -r " .. tmpdir .. "/binutils-extract/* " .. ROOT)
 for _, bin in ipairs(binaries) do
     table.insert(pkg.files, ROOT .. "/usr/bin/" .. bin)
     end
