@@ -46,10 +46,10 @@ local build_dir = tmpdir .. "/util-linux-" .. pkg.version
 local out_dir = tmpdir .. "/out"
 sh("cd " .. build_dir .. " && sudo make DESTDIR=" .. out_dir .. " install")
 sh("cd " .. out_dir .. " && mkdir -p usr/bin usr/lib")
-sh("cd " .. out_dir .. " && [ -d sbin ] && sudo mv sbin/* bin/ || true")
-sh("cd " .. out_dir .. " && [ -d lib ] && sudo mv lib/* usr/lib/ || true")
-sh("cd " .. out_dir .. " && [ -d bin ] && sudo mv bin/* usr/bin/ || true")
-sh("cd " .. out_dir .. " && [ -d usr/sbin ] && sudo mv usr/sbin/* usr/bin/ || true")
+sh("cd " .. out_dir .. " && [ -d sbin ] && sudo mv sbin/* bin/ && sudo rm -rf sbin")
+sh("cd " .. out_dir .. " && [ -d lib ] && sudo mv lib/* usr/lib/ && sudo rm -rf lib")
+sh("cd " .. out_dir .. " && [ -d bin ] && sudo mv bin/* usr/bin/ && sudo rm -rf bin")
+sh("cd " .. out_dir .. " && [ -d usr/sbin ] && sudo mv usr/sbin/* usr/bin/ && sudo rm -rf usr/sbin")
 sh("cp -r " .. out_dir .. "/* " .. ROOT)
 local binaries = { "mount", "umount", "fdisk", "mkfs", "blkid", "lsblk", "findmnt", "losetup", "sfdisk", "cfdisk", "partx", "dmesg", "lscpu", "lsmem" }
 for _, bin in ipairs(binaries) do
