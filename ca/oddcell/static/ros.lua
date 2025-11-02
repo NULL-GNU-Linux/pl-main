@@ -5,9 +5,9 @@ pkg = {
 	maintainer = "TheOddCell <odd@obsidianos.xyz>",
 	license = "MIT",
 	homepage = "https://static.oddcell.ca/",
-	depends = { coreutils, sh },
+	depends = { "coreutils", "sh" },
 	conflicts = {},
-	provides = {},
+	provides = { "ros" },
 	files = {},
 }
 
