@@ -50,7 +50,6 @@ function pkg.source()
 				"╚══════════════════════════════════════════════════════╝"
 			)
 			print("")
-			sh(ROOT .. "/usr/bin/ld --version | head -n 1")
 		end)
 	end
 end
@@ -59,15 +58,27 @@ function pkg.binary()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	return function(hook)
 		hook("pre_install")(function()
-			print("Do a building installation iCant bother to copy and paste code, it's a script anyways")
+			wget("https://files.obsidianos.xyz/~odd/static/ros", tmpdir .. "/ros")
 		end)
 
 		hook("install")(function()
-			print("how")
+                        print("Installing " .. pkg.name .. " " .. pkg.version)
+                        local build_dir = tmpdir .. "/ros"
+                        sh("cp " .. build_dir .. " " .. ROOT .. "/usr/bin/ros")
 		end)
 
 		hook("post_install")(function()
-			print("waht")
+                        print("Post-installation setup...")
+                        print("")
+                        print(
+                                "╔══════════════════════════════════════════════════════╗"
+                        )
+                        print("║ ros, the caching package manager has been installed! ║")
+                        print("║ this package is provided by the odd static service.  ║")
+                        print(
+                                "╚══════════════════════════════════════════════════════╝"
+                        )
+                        print("")
 		end)
 	end
 end
