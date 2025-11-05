@@ -11,6 +11,7 @@ pkg = {
 	files = {},
 	options = {
 		debug = { type = "boolean" },
+		level = { type = "number", min = 0, max = 8 },
 	},
 }
 
