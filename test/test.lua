@@ -9,6 +9,9 @@ pkg = {
 	conflicts = {},
 	provides = {},
 	files = {},
+	options = {
+		debug = { type = "boolean" },
+	},
 }
 
 function pkg.binary()
