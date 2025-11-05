@@ -9,6 +9,9 @@ pkg = {
 	conflicts = {},
 	provides = { "busybox", "sh", "coreutils" },
 	files = {},
+	options = {
+		no_symlinks = { type = "boolean", default = false },
+	},
 }
 
 function pkg.source()
