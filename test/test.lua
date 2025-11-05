@@ -13,9 +13,7 @@ pkg = {
 
 function pkg.binary()
 	return function(hook)
-		hook("install")(function()
-			dump(OPTIONS)
-		end)
+		hook("install")(function() end)
 		hook("post_install")(function()
 			dump(OPTIONS)
 		end)
