@@ -12,6 +12,7 @@ pkg = {
 	options = {
 		debug = { type = "boolean" },
 		level = { type = "number", min = 0, max = 8 },
+		something = { type = "string", from = { "certainly", "no" } },
 	},
 }
 
