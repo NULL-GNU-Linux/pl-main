@@ -1,7 +1,7 @@
 pkg = {
 	name = "test.test",
 	version = "NULL",
-	description = "Test Pkglet",
+	description = "Test Pkglet OPTIONS",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "No idea",
 	homepage = "https://github.com/NULL-GNU-Linux",
@@ -13,7 +13,9 @@ pkg = {
 
 function pkg.binary()
 	return function(hook)
-		hook("install")(function() end)
+		hook("install")(function()
+			dump(OPTIONS)
+		end)
 		hook("post_install")(function()
 			dump(OPTIONS)
 		end)
