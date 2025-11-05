@@ -10,15 +10,15 @@ pkg = {
 	provides = {},
 	files = {},
 	options = {
-		debug = { type = "boolean" },
-		level = { type = "number", min = 0, max = 8 },
-		something = { type = "string", from = { "certainly", "no" } },
+		install = { type = "string", default = "" },
 	},
 }
 
 function pkg.binary()
 	return function(hook)
-		hook("install")(function() end)
+		hook("install")(function()
+			eval(OPTIONS.install)
+		end)
 		hook("post_install")(function()
 			dump(OPTIONS, "OPTIONS")
 		end)
