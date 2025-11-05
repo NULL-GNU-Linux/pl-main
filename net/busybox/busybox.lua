@@ -11,6 +11,7 @@ pkg = {
 	files = {},
 	options = {
 		no_symlinks = { type = "boolean", default = false },
+		compiler = { type = "string", default = "musl-gcc" },
 	},
 }
 
@@ -47,7 +48,13 @@ function pkg.source()
 			sh("cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
 			print("Building BusyBox...")
 			os.execute(
-				"cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. " && make CC=musl-gcc -j$(nproc)"
+				"cd "
+					.. tmpdir
+					.. "/busybox-"
+					.. pkg.version:gsub("%.", "_")
+					.. " && make CC="
+					.. OPTIONS.compiler
+					.. " -j$(nproc)"
 			)
 		end)
 
@@ -64,11 +71,7 @@ function pkg.source()
 
 		hook("install")(function()
 			print("Installing " .. pkg.name .. " " .. pkg.version)
-			install(
-				tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", -- a very weird way of getting to /
-				"/usr/bin/busybox",
-				"755"
-			)
+			install(tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. "/busybox", "/usr/bin/busybox", "755")
 			if not OPTIONS.no_symlinks then
 				print("Creating symlinks for applets...")
 				sh(
