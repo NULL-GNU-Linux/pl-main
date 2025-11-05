@@ -138,17 +138,19 @@ function pkg.binary()
 			print("Installing binary files...")
 			install(tmpdir .. "/busybox-binary", "/usr/bin/busybox", "755")
 			table.insert(pkg.files, ROOT .. "/usr/bin/busybox")
-			print("Creating symlinks for applets...")
-			sh(
-				ROOT
-					.. "/usr/bin/busybox --list | grep -xv 'busybox' | grep -xv 'ar' | grep -xv 'strings' | while read applet; do "
-					.. "[ ! -e '"
-					.. ROOT
-					.. "/usr/bin/$applet' ] && ln -s /usr/bin/busybox \""
-					.. ROOT
-					.. '/usr/bin/$applet" || true; '
-					.. "done"
-			)
+			if not OPTIONS.no_symlinks then
+				print("Creating symlinks for applets...")
+				sh(
+					ROOT
+						.. "/usr/bin/busybox --list | grep -xv 'busybox' | grep -xv 'ar' | grep -xv 'strings' | while read applet; do "
+						.. "[ ! -e '"
+						.. ROOT
+						.. "/usr/bin/$applet' ] && ln -s /usr/bin/busybox \""
+						.. ROOT
+						.. '/usr/bin/$applet" || true; '
+						.. "done"
+				)
+			end
 		end)
 
 		hook("post_install")(function()
