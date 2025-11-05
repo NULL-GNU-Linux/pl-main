@@ -60,9 +60,8 @@ function pkg.binary()
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for " .. pkg.name)
-			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
-			print("Detected architecture: " .. arch)
-			if arch ~= "x86_64" then
+			print("Detected architecture: " .. ARCH)
+			if ARCH ~= "x86_64" then
 				error("Binary package only available for x86_64")
 			end
 

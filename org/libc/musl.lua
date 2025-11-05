@@ -71,8 +71,7 @@ function pkg.binary()
 				error("Bootstrap mode required for musl libc.")
 			end
 			print("Preparing binary installation for musl libc...")
-			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
-			print("Detected architecture: " .. arch)
+			print("Detected architecture: " .. ARCH)
 			local arch_map = {
 				x86_64 = "x86_64",
 				aarch64 = "aarch64",
@@ -80,9 +79,9 @@ function pkg.binary()
 				i686 = "i686",
 			}
 
-			local musl_arch = arch_map[arch]
+			local musl_arch = arch_map[ARCH]
 			if not musl_arch then
-				error("Binary package not available for architecture: " .. arch)
+				error("Binary package not available for architecture: " .. ARCH)
 			end
 
 			print("Downloading musl prebuilt binary...")

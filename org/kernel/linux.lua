@@ -15,8 +15,7 @@ function pkg.source()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	return function(hook)
 		hook("prepare")(function()
-			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
-			print("Detected architecture: " .. arch)
+			print("Detected architecture: " .. ARCH)
 			print("Downloading Linux source...")
 			sh(
 				"mkdir -p "
@@ -29,7 +28,7 @@ function pkg.source()
 			)
 			sh(
 				"curl https://raw.githubusercontent.com/NULL-GNU-Linux/linux/refs/heads/main/"
-					.. arch
+					.. ARCH
 					.. ".conf -o "
 					.. tmpdir
 					.. "/linux-"
@@ -98,11 +97,10 @@ function pkg.binary()
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for Linux...")
-			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
-			print("Detected architecture: " .. arch)
+			print("Detected architecture: " .. ARCH)
 			print("Downloading Linux prebuilt from our servers...")
-			local url = "https://files.obsidianos.xyz/~neo/null/" .. arch .. "-linux.tar.gz"
-			curl(url, tmpdir .. "/linux-" .. arch .. ".tar.gz")
+			local url = "https://files.obsidianos.xyz/~neo/null/" .. ARCH .. "-linux.tar.gz"
+			curl(url, tmpdir .. "/linux-" .. ARCH .. ".tar.gz")
 			print("Extracting Linux...")
 			sh(
 				"mkdir -p "
@@ -110,7 +108,7 @@ function pkg.binary()
 					.. "/linux && tar -xzf "
 					.. tmpdir
 					.. "/linux-"
-					.. arch
+					.. ARCH
 					.. ".tar.gz -C "
 					.. tmpdir
 					.. "/linux"

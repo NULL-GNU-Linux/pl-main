@@ -15,23 +15,23 @@ function pkg.source()
 	return function(hook)
 		hook("prepare")(function()
 			print("Preparing source code...")
-			sh(
-				"git clone "
-					.. pkg.homepage
-					.. " --depth=1 -b v"
-					.. pkg.version
-					.. " "
-					.. tmpdir
-					.. "/nvimsrc"
-			)
+			sh("git clone " .. pkg.homepage .. " --depth=1 -b v" .. pkg.version .. " " .. tmpdir .. "/nvimsrc")
 		end)
 
-					hook("build")(function()
-					print("Building...")
-					sh("cd " .. tmpdir .. "/nvimsrc && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/")		end)
-					hook("install")(function()
-					print("Installing " .. pkg.name .. " " .. pkg.version)
-					sh("cd " .. tmpdir .. "/nvimsrc && sudo make CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/ install")		end)
+		hook("build")(function()
+			print("Building...")
+			sh(
+				"cd "
+					.. tmpdir
+					.. "/nvimsrc && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX="
+					.. ROOT
+					.. "/usr/"
+			)
+		end)
+		hook("install")(function()
+			print("Installing " .. pkg.name .. " " .. pkg.version)
+			sh("cd " .. tmpdir .. "/nvimsrc && sudo make CMAKE_INSTALL_PREFIX=" .. ROOT .. "/usr/ install")
+		end)
 
 		hook("post_install")(function()
 			print("Post-installation setup...")
@@ -54,19 +54,17 @@ function pkg.binary()
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for " .. pkg.name)
-			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
-			print("Detected architecture: " .. arch)
+			print("Detected architecture: " .. ARCH)
 			print("Downloading binary package...")
 			local url = "https://github.com/neovim/neovim/releases/download/v"
 				.. pkg.version
 				.. "/nvim-linux-"
-				.. arch
+				.. ARCH
 				.. ".tar.gz"
 			curl(url, tmpdir .. "/nvim-binary.tar.gz")
 		end)
 
 		hook("install")(function()
-			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
 			print("Installing binary files...")
 
 			sh(
@@ -75,7 +73,7 @@ function pkg.binary()
 					.. "/nvim-binary.tar.gz --strip-components=1 -C "
 					.. ROOT
 					.. "/usr/ nvim-linux-"
-					.. arch
+					.. ARCH
 			)
 			table.insert(pkg.files, ROOT .. "/usr/")
 		end)

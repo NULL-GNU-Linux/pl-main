@@ -104,9 +104,7 @@ function pkg.binary()
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for " .. pkg.name)
-			local arch = io.popen("uname -m"):read("*all"):gsub("%s+", "")
-			print("Detected architecture: " .. arch)
-
+			print("Detected architecture: " .. ARCH)
 			local arch_map = {
 				x86_64 = "amd64",
 				aarch64 = "armv8l",
@@ -114,9 +112,9 @@ function pkg.binary()
 				i686 = "i686",
 			}
 
-			local busybox_arch = arch_map[arch]
+			local busybox_arch = arch_map[ARCH]
 			if not busybox_arch then
-				error("Binary package not available for architecture: " .. arch)
+				error("Binary package not available for architecture: " .. ARCH)
 			end
 
 			print("Downloading BusyBox binary...")
