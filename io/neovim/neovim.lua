@@ -1,6 +1,6 @@
 pkg = {
 	name = "io.neovim.neovim",
-	version = "0.11.4",
+	version = "0.11.5",
 	description = "hyperextensible Vim-based text editor",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "Apache-2.0",
