@@ -9,6 +9,10 @@ pkg = {
 	conflicts = {},
 	provides = { "linux" },
 	files = {},
+	options = {
+		custom_config = { type = "boolean", default = false },
+		no_modules = { type = "boolean", default = false },
+	},
 }
 
 function pkg.source()
@@ -40,6 +44,10 @@ function pkg.source()
 		hook("build")(function()
 			print("Configuring Linux...")
 			sh("cd " .. tmpdir .. "/linux-" .. pkg.version .. ' && (yes "" | make oldconfig)')
+			if OPTIONS.custom_config then
+				print("Launching make menuconfig...")
+				sh("cd " .. tmpdir .. "/linux-" .. pkg.version .. " && make menuconfig")
+			end
 			print("Building Linux...")
 			sh("cd " .. tmpdir .. "/linux-" .. pkg.version .. " && make -j$(nproc)")
 		end)
@@ -66,16 +74,20 @@ function pkg.source()
 					.. ROOT
 					.. "/boot/vmlinuz-linux"
 			)
-			sh(
-				"cd "
-					.. tmpdir
-					.. "/linux-"
-					.. pkg.version
-					.. " && make modules_install INSTALL_MOD_PATH="
-					.. (ROOT or "/")
-			)
+			if OPTIONS.no_modules then
+				sh(
+					"cd "
+						.. tmpdir
+						.. "/linux-"
+						.. pkg.version
+						.. " && make modules_install INSTALL_MOD_PATH="
+						.. (ROOT or "/")
+				)
+			end
 			table.insert(pkg.files, ROOT .. "/boot/vmlinuz-linux")
-			table.insert(pkg.files, ROOT .. "/usr/lib/modules/")
+			if OPTIONS.no_modules then
+				table.insert(pkg.files, ROOT .. "/usr/lib/modules/")
+			end
 		end)
 
 		hook("post_install")(function()
@@ -97,6 +109,12 @@ function pkg.binary()
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for Linux...")
+			if OPTIONS.no_modules then
+				print("WARNING: Binary install does not support the no_modules option.")
+			end
+			if OPTIONS.custom_config then
+				print("WARNING: Binary install does not support the custom_config option.")
+			end
 			print("Detected architecture: " .. ARCH)
 			print("Downloading Linux prebuilt from our servers...")
 			local url = "https://files.obsidianos.xyz/~neo/null/" .. ARCH .. "-linux.tar.gz"
