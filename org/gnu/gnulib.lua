@@ -47,7 +47,7 @@ function pkg.source()
 			sh("mkdir -p " .. ROOT .. "/usr/share/gnulib")
 			sh("mkdir -p " .. ROOT .. "/usr/bin")
 			sh("cp -r " .. tmpdir .. "/gnulib-" .. pkg.version .. "/* " .. ROOT .. "/usr/share/gnulib/")
-			sh("ln -sf " .. ROOT .. "/usr/share/gnulib/gnulib-tool " .. ROOT .. "/usr/bin/gnulib-tool")
+			sh("ln -sf /usr/share/gnulib/gnulib-tool " .. ROOT .. "/usr/bin/gnulib-tool")
 			if not OPTIONS.install_docs then
 				print("Removing documentation...")
 				sh("rm -rf " .. ROOT .. "/usr/share/gnulib/doc")
