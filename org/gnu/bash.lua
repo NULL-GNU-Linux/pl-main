@@ -133,7 +133,7 @@ function pkg.binary()
 						.. ARCH
 						.. ".tar.gz "
 						.. tmpdir
-						.. "/usr/bin/bash"
+						.. "/bash/usr/bin/bash"
 				)
 			end
 		end)
