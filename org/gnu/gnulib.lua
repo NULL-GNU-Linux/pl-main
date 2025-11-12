@@ -15,10 +15,9 @@ pkg = {
 	},
 }
 
-local GNULIB_BASE_URL = "https://github.com/coreutils/gnulib/archive/refs/tags/v" .. pkg.version .. ".tar.gz"
-local BINARY_BASE_URL = "https://files.obsidianos.xyz/~neo/null/" .. ARCH .. "-gnulib-" .. pkg.version .. ".tar.gz"
 function pkg.source()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
+	local GNULIB_BASE_URL = "https://github.com/coreutils/gnulib/archive/refs/tags/v" .. pkg.version .. ".tar.gz"
 	return function(hook)
 		hook("prepare")(function()
 			print("Detected architecture: " .. ARCH)
@@ -80,6 +79,7 @@ end
 
 function pkg.binary()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
+	local BINARY_BASE_URL = "https://files.obsidianos.xyz/~neo/null/" .. ARCH .. "-gnulib-" .. pkg.version .. ".tar.gz"
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for gnulib...")
