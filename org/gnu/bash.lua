@@ -1,6 +1,6 @@
 pkg = {
 	name = "org.gnu.bash",
-	version = "5.3.3",
+	version = "5.3",
 	description = "The GNU Bourne Again shell.",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "GPL-3.0",
