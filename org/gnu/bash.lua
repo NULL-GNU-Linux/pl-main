@@ -140,7 +140,7 @@ function pkg.binary()
 
 		hook("install")(function()
 			print("Installing bash...")
-			sh("cp -r " .. tmpdir .. "/bash/* " .. ROOT .. "/")
+			sh("sudo cp -r " .. tmpdir .. "/bash/* " .. ROOT .. "/")
 			table.insert(pkg.files, ROOT .. "/usr/bin/bash")
 			table.insert(pkg.files, ROOT .. "/usr/bin/sh")
 			table.insert(pkg.files, ROOT .. "/usr/share/man/man1/bash.1")
