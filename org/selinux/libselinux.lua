@@ -43,13 +43,13 @@ function pkg.source()
 			local src_dir = tmpdir .. "/selinux-" .. pkg.version .. "/libselinux"
 			local out_dir = tmpdir .. "/out"
 			sh("cd " .. src_dir .. " && sudo make DESTDIR=" .. out_dir .. " PREFIX=/usr install")
-			sh("cd " .. out_dir .. " && mkdir -p usr/bin usr/lib64")
+			sh("cd " .. out_dir .. " && sudo mkdir -p usr/bin usr/lib64")
 			sh("cd " .. out_dir .. " && [ -d sbin ] && sudo mv sbin/* bin/ || true")
 			sh("cd " .. out_dir .. " && [ -d bin ] && sudo mv bin/* usr/bin/ || true")
 			sh("cd " .. out_dir .. " && [ -d lib ] && sudo mv lib/* usr/lib64/ || true")
 			sh("cd " .. out_dir .. " && [ -d usr/sbin ] && sudo mv usr/sbin/* usr/bin/ || true")
 			sh("cd " .. out_dir .. " && [ -d usr/lib ] && sudo mv usr/lib/* usr/lib64/ || true")
-			sh("cp -r " .. out_dir .. "/* " .. ROOT)
+			sh("sudo cp -r " .. out_dir .. "/* " .. ROOT)
 			local libs = {
 				"libselinux.so.1",
 				"libselinux.so",
