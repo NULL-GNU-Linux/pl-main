@@ -9,6 +9,9 @@ pkg = {
 	conflicts = {},
 	provides = { "git" },
 	files = {},
+	options = {
+		extra_configs = { type = "string", default = "" },
+	},
 }
 
 function pkg.source()
@@ -27,7 +30,7 @@ function pkg.source()
 			sh(
 				"cd "
 					.. source_dir
-					.. ' && ./configure LDFLAGS="-static" NO_SHARED=1 --prefix=/usr --with-openssl --with-curl --with-expat'
+					.. ' && ./configure LDFLAGS="-static" NO_SHARED=1 --prefix=/usr --with-openssl --with-curl --with-expat ' .. OPTIONS..extra_configs
 			)
 			sh("cd " .. source_dir .. " && make")
 		end)

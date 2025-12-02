@@ -12,6 +12,7 @@ pkg = {
 	options = {
 		static = { type = "boolean", default = false },
 		multibyte = { type = "boolean", default = true },
+		extra_configs = { type = "string", default = "" },
 	},
 }
 
@@ -35,7 +36,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring readline...")
-			local configure_flags = "--prefix=/usr"
+			local configure_flags = "--prefix=/usr " .. OPTIONS.extra_configs
 			if OPTIONS.static then
 				configure_flags = configure_flags .. " --enable-static"
 			end

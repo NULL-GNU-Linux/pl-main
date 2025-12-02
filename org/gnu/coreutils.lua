@@ -9,6 +9,9 @@ pkg = {
 	conflicts = {},
 	provides = { "coreutils", "ls", "cat", "cp", "mv", "rm", "mkdir" },
 	files = {},
+	options = {
+		extra_configs = { type = "string", default = "" },
+	},
 }
 
 function pkg.source()
@@ -26,7 +29,7 @@ function pkg.source()
 			print("Building coreutils...")
 			local src_dir = tmpdir .. "/coreutils-" .. pkg.version
 			local build_dir = tmpdir .. "/coreutils-build"
-			sh("cd " .. build_dir .. " && " .. src_dir .. "/configure --prefix=/usr")
+			sh("cd " .. build_dir .. " && " .. src_dir .. "/configure --prefix=/usr " .. OPTIONS.extra_configs)
 			sh("cd " .. build_dir .. " && sudo make -j$(nproc)")
 		end)
 

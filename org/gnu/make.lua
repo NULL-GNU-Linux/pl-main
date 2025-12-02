@@ -13,6 +13,7 @@ pkg = {
 		disable_nls = { type = "boolean", default = false },
 		enable_guile = { type = "boolean", default = false },
 		static = { type = "boolean", default = false },
+		extra_configs = { type = "string", default = "" },
 	},
 }
 
@@ -37,7 +38,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring GNU Make...")
-			local configure_flags = "--prefix=/usr"
+			local configure_flags = "--prefix=/usr " .. OPTIONS.extra_configs
 			if OPTIONS.disable_nls then
 				configure_flags = configure_flags .. " --disable-nls"
 			end

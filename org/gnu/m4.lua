@@ -12,6 +12,7 @@ pkg = {
 	options = {
 		enable_changeword = { type = "boolean", default = false },
 		disable_nls = { type = "boolean", default = false },
+		extra_configs = { type = "string", default = "" },
 	},
 }
 
@@ -30,7 +31,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring GNU M4...")
-			local configure_flags = "--prefix=/usr"
+			local configure_flags = "--prefix=/usr " .. OPTIONS.extra_configs
 			if OPTIONS.enable_changeword then
 				configure_flags = configure_flags .. " --enable-changeword"
 			end

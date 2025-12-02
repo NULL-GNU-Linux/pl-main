@@ -9,6 +9,9 @@ pkg = {
 	conflicts = {},
 	provides = { "binutils", "ld", "as", "ar", "nm", "objdump", "strip", "readelf" },
 	files = {},
+	options = {
+		extra_configs = { type = "string", default = "" },
+	},
 }
 
 function pkg.source()
@@ -28,7 +31,7 @@ function pkg.source()
 			sh(
 				"cd "
 					.. build_dir
-					.. " && ./configure --prefix=/usr --enable-gold --enable-ld=default --enable-plugins --disable-werror --with-system-zlib"
+					.. " && ./configure --prefix=/usr --enable-gold --enable-ld=default --enable-plugins --disable-werror --with-system-zlib " .. OPTIONS.extra_configs
 			)
 
 			print("Building GNU binutils...")

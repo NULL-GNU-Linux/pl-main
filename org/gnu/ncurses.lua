@@ -13,6 +13,7 @@ pkg = {
 		enable_widec = { type = "boolean", default = true },
 		enable_ext_colors = { type = "boolean", default = true },
 		with_cxx_binding = { type = "boolean", default = true },
+		extra_configs = { type = "string", default = "" },
 	},
 }
 
@@ -38,7 +39,7 @@ function pkg.source()
 		hook("build")(function()
 			print("Configuring ncurses...")
 			local configure_opts =
-				"./configure --prefix=/usr --with-shared --without-debug --enable-pc-files --with-pkg-config-libdir=/usr/lib/pkgconfig"
+				"./configure --prefix=/usr --with-shared --without-debug --enable-pc-files --with-pkg-config-libdir=/usr/lib/pkgconfig " .. OPTIONS.extra_configs
 
 			if OPTIONS.enable_widec then
 				configure_opts = configure_opts .. " --enable-widec"

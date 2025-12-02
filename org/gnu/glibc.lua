@@ -9,6 +9,9 @@ pkg = {
 	conflicts = { "org.libc.musl" },
 	provides = { "glibc", "libc", "ld-linux" },
 	files = {},
+	options = {
+		extra_configs = { type = "string", default = "" }
+	}
 }
 
 function pkg.source()
@@ -26,7 +29,7 @@ function pkg.source()
 			print("Building glibc...")
 			local src_dir = tmpdir .. "/glibc-" .. pkg.version
 			local build_dir = tmpdir .. "/glibc-build"
-			sh("cd " .. build_dir .. " && " .. src_dir .. "/configure --prefix=/usr")
+			sh("cd " .. build_dir .. " && " .. src_dir .. "/configure --prefix=/usr " .. OPTIONS.extra_configs)
 			sh("cd " .. build_dir .. " && sudo make -j$(nproc)")
 		end)
 

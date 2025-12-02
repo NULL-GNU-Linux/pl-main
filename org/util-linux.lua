@@ -9,6 +9,9 @@ pkg = {
 	conflicts = {},
 	provides = { "util-linux", "mount", "umount", "fdisk", "mkfs", "blkid", "lsblk" },
 	files = {},
+	options = {
+		extra_configs = { type = "string", default = "" },
+	},
 }
 
 function pkg.source()
@@ -25,7 +28,7 @@ function pkg.source()
 			print("Building util-linux...")
 			local build_dir = tmpdir .. "/util-linux-" .. pkg.version
 			sh("cd " .. build_dir .. " && ./autogen.sh")
-			sh("cd " .. build_dir .. " && ./configure")
+			sh("cd " .. build_dir .. " && ./configure " .. OPTIONS.extra_configs)
 			sh("cd " .. build_dir .. " && sudo make -j$(nproc)")
 		end)
 

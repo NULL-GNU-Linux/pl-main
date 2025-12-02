@@ -12,6 +12,7 @@ pkg = {
 	options = {
 		enable_docs = { type = "boolean", default = true },
 		enable_tests = { type = "boolean", default = false },
+		extra_configs = { type = "string", default = "" },
 	},
 }
 
@@ -34,7 +35,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring autoconf...")
-			local configure_opts = "--prefix=/usr"
+			local configure_opts = "--prefix=/usr " .. OPTIONS.extra_configs
 			if not OPTIONS.enable_docs then
 				configure_opts = configure_opts .. " --disable-doc"
 			end

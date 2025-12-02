@@ -12,6 +12,7 @@ pkg = {
 	options = {
 		no_symlinks = { type = "boolean", default = false },
 		compiler = { type = "string", default = "musl-gcc" },
+		menuconfig = { type = "boolean", default = false },
 	},
 }
 
@@ -46,6 +47,9 @@ function pkg.source()
 					.. "/.config"
 			)
 			sh("cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. ' && (yes "" | make oldconfig)')
+			if OPTIONS.menuconfig then
+				sh("cd " .. tmpdir .. "/busybox-" .. pkg.version:gsub("%.", "_") .. ' && make menuconfig')
+			end
 			print("Building BusyBox...")
 			os.execute(
 				"cd "

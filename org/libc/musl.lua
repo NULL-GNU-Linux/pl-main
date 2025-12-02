@@ -9,6 +9,9 @@ pkg = {
 	conflicts = { "org.gnu.glibc" },
 	provides = { "musl", "libc", "ld-linux" },
 	files = {},
+	options = {
+		extra_configs = { type = "string", default = "" },
+	},
 }
 
 function pkg.source()
@@ -26,7 +29,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring musl...")
-			sh("cd " .. tmpdir .. "/musl-" .. pkg.version .. " && ./configure --prefix=" .. ROOT)
+			sh("cd " .. tmpdir .. "/musl-" .. pkg.version .. " && ./configure --prefix=" .. ROOT .. " " .. OPTIONS.extra_configs)
 			print("Building musl...")
 			sh("cd " .. tmpdir .. "/musl-" .. pkg.version .. " && make -j$(nproc)")
 		end)

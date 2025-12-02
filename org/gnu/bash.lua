@@ -12,6 +12,7 @@ pkg = {
 	options = {
 		minimal = { type = "boolean", default = false },
 		static = { type = "boolean", default = false },
+		extra_configs = { type = "string", default = "" },
 	},
 }
 
@@ -47,7 +48,7 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring bash...")
-			local config_opts = "--prefix=/usr --bindir=/usr/bin --sysconfdir=/etc --localstatedir=/var"
+			local config_opts = "--prefix=/usr --bindir=/usr/bin --sysconfdir=/etc --localstatedir=/var " .. OPTIONS.extra_configs
 			if OPTIONS.static then
 				config_opts = config_opts .. " --enable-static-link"
 			end

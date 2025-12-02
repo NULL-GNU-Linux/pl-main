@@ -9,7 +9,10 @@ pkg = {
 	conflicts = {},
 	provides = { "booster", "initramfs" },
 	files = {},
-	options = {},
+	options = {
+		extra_configs = { type = "string", default = "" },
+		init_extra_configs = { type = "string", default = "" },
+	},
 }
 
 function pkg.source()
@@ -36,7 +39,7 @@ function pkg.source()
 					.. tmpdir
 					.. "/booster-"
 					.. pkg.version
-					.. '/generator && go build -trimpath -buildmode=pie -mod=readonly -modcacherw -ldflags "-linkmode external"'
+					.. '/generator && go build -trimpath -buildmode=pie -mod=readonly -modcacherw -ldflags "-linkmode external ' .. OPTIONS.extra_configs .. '"'
 			)
 			print("Building booster init...")
 			sh(
@@ -44,7 +47,7 @@ function pkg.source()
 					.. tmpdir
 					.. "/booster-"
 					.. pkg.version
-					.. "/init && CGO_ENABLED=0 go build -trimpath -mod=readonly -modcacherw"
+					.. "/init && CGO_ENABLED=0 go build -trimpath -mod=readonly -modcacherw " .. OPTIONS.init_extra_configs
 			)
 		end)
 

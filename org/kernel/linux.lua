@@ -10,7 +10,7 @@ pkg = {
 	provides = { "linux" },
 	files = {},
 	options = {
-		custom_config = { type = "boolean", default = false },
+		menuconfig = { type = "boolean", default = false },
 		no_modules = { type = "boolean", default = false },
 	},
 }
@@ -44,7 +44,7 @@ function pkg.source()
 		hook("build")(function()
 			print("Configuring Linux...")
 			sh("cd " .. tmpdir .. "/linux-" .. pkg.version .. ' && (yes "" | make oldconfig)')
-			if OPTIONS.custom_config then
+			if OPTIONS.menuconfig then
 				print("Launching make menuconfig...")
 				sh("cd " .. tmpdir .. "/linux-" .. pkg.version .. " && make menuconfig")
 			end
