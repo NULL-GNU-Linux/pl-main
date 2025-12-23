@@ -22,7 +22,7 @@ function pkg.source()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	source_url = "https://ftp.gnu.org/gnu/grub/" .. tarball_name
 	srcdir = tmpdir .. "/grub-" .. pkg.version
-	builddir = tmpdir .. "/build"
+	builddir = srcdir .. "/build"
 	return function(hook)
 		hook("prepare")(function()
 			print("Detected architecture: " .. ARCH)
@@ -34,7 +34,8 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring GRUB...")
-			local config_flags = "--prefix=/usr --sbindir=/usr/bin --sysconfdir=/etc --disable-werror"
+			local config_flags =
+				"--prefix=/usr --sbindir=/usr/bin --sysconfdir=/etc --enable-boot-time --enable-cache-stats --enable-device-mapper --enable-grub-mkfont --enable-grub-mount --enable-nls --disable-silent-rules --disable-werror"
 			if OPTIONS.efi then
 				config_flags = config_flags .. " --with-platform=efi --target=x86_64"
 			end
