@@ -19,7 +19,6 @@ pkg = {
 major_version = pkg.version:match("^(%d+%.%d+)")
 tarball_name = "grub-" .. pkg.version .. ".tar.xz"
 source_url = "https://ftp.gnu.org/gnu/grub/" .. tarball_name
-binary_url = "https://files.obsidianos.xyz/~neo/null/" .. ARCH .. "-grub.tar.gz"
 function pkg.source()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	srcdir = tmpdir .. "/grub-" .. pkg.version
@@ -170,6 +169,7 @@ end
 
 function pkg.binary()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
+	binary_url = "https://files.obsidianos.xyz/~neo/null/" .. ARCH .. "-grub.tar.gz"
 	return function(hook)
 		hook("pre_install")(function()
 			print("Preparing binary installation for GRUB...")
