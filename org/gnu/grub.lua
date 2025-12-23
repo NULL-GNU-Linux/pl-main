@@ -1,6 +1,6 @@
 pkg = {
 	name = "org.gnu.grub",
-	version = "2.12",
+	version = "2.14",
 	description = "GNU GRUB bootloader.",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "GPL-3.0",
@@ -38,6 +38,7 @@ function pkg.source()
 			if OPTIONS.efi then
 				config_flags = config_flags .. " --with-platform=efi --target=x86_64"
 			end
+			sh("cd " .. srcdir .. " && ./autogen.sh")
 			sh("cd " .. builddir .. " && " .. srcdir .. "/configure " .. config_flags)
 			print("Building GRUB...")
 			sh("cd " .. builddir .. " && make -j$(nproc)")
