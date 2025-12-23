@@ -34,16 +34,16 @@ function pkg.source()
 
 		hook("build")(function()
 			print("Configuring GRUB...")
-			sh("cd " .. srcdir .. " && ./linguas.sh && ./bootstrap")
+			sh("cd " .. srcdir .. " && ./linguas.sh")
 			local config_flags =
 				"--prefix=/usr --sbindir=/usr/bin --sysconfdir=/etc --enable-boot-time --enable-cache-stats --enable-device-mapper --enable-grub-mkfont --enable-grub-mount --enable-nls --disable-silent-rules --disable-werror"
 			if OPTIONS.efi then
 				config_flags = config_flags .. " --with-platform=efi --target=x86_64"
 			end
 			sh("cd " .. srcdir .. " && ./autogen.sh")
-			sh("cd " .. builddir .. " && " .. srcdir .. "/configure " .. config_flags)
+			sh("cd " .. builddir .. ' && ../configure PACKAGE_VERSION="' .. pkg.version .. '"' .. config_flags)
 			print("Building GRUB...")
-			sh("cd " .. builddir .. " && make -j$(nproc)")
+			sh("cd " .. builddir .. " && make")
 		end)
 
 		hook("pre_install")(function()
