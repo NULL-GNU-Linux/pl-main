@@ -42,8 +42,6 @@ function pkg.source()
 		hook("prepare")(function()
 			print("Detected architecture: " .. ARCH)
 			print("Downloading GRUB source...")
-			sh("rm -rf " .. tmpdir)
-			sh("mkdir -p " .. tmpdir)
 			sh("cd " .. tmpdir .. " && curl -L " .. source_url .. " | tar -xJ")
 
 			print("Cloning grub-extras...")
