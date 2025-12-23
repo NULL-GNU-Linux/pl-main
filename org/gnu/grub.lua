@@ -22,12 +22,14 @@ function pkg.source()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	source_url = "https://ftp.gnu.org/gnu/grub/" .. tarball_name
 	srcdir = tmpdir .. "/grub-" .. pkg.version
+	builddir = tmpdir .. "/build"
 	return function(hook)
 		hook("prepare")(function()
 			print("Detected architecture: " .. ARCH)
 			print("Downloading GRUB source...")
 			sh("mkdir -p " .. tmpdir)
 			sh("cd " .. tmpdir .. " && curl -L " .. source_url .. " | tar -xJ")
+			sh("mkdir -p " .. builddir)
 		end)
 
 		hook("build")(function()
@@ -36,9 +38,9 @@ function pkg.source()
 			if OPTIONS.efi then
 				config_flags = config_flags .. " --with-platform=efi --target=x86_64"
 			end
-			sh("cd " .. srcdir .. " && ./configure " .. config_flags)
+			sh("cd " .. builddir .. " && " .. srcdir .. "/configure " .. config_flags)
 			print("Building GRUB...")
-			sh("cd " .. srcdir .. " && make -j$(nproc)")
+			sh("cd " .. builddir .. " && make -j$(nproc)")
 		end)
 
 		hook("pre_install")(function()
@@ -54,7 +56,7 @@ function pkg.source()
 
 		hook("install")(function()
 			print("Installing GRUB...")
-			sh("cd " .. srcdir .. " && make install DESTDIR=" .. (ROOT or "/"))
+			sh("cd " .. builddir .. " && make install DESTDIR=" .. (ROOT or "/"))
 			table.insert(pkg.files, ROOT .. "/usr/bin/grub-install")
 			table.insert(pkg.files, ROOT .. "/usr/bin/grub-mkconfig")
 			table.insert(pkg.files, ROOT .. "/usr/lib/grub/")
