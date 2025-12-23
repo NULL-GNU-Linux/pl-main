@@ -1,6 +1,6 @@
 pkg = {
 	name = "org.gnu.grub",
-	version = "2.12",
+	version = "git",
 	description = "GNU GRUB bootloader.",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "GPL-3.0",
@@ -17,8 +17,6 @@ pkg = {
 }
 
 major_version = pkg.version:match("^(%d+%.%d+)")
-tarball_name = "grub-" .. pkg.version .. ".tar.xz"
-source_url = "https://ftp.gnu.org/gnu/grub/" .. tarball_name
 function pkg.source()
 	tmpdir = os.getenv("HOME") .. "/.cache/pkglet/build/" .. pkg.name
 	srcdir = tmpdir .. "/grub-" .. pkg.version
@@ -42,7 +40,7 @@ function pkg.source()
 		hook("prepare")(function()
 			print("Detected architecture: " .. ARCH)
 			print("Downloading GRUB source...")
-			sh("cd " .. tmpdir .. " && curl -L " .. source_url .. " | tar -xJ")
+			sh("cd " .. tmpdir .. " && git clone https://github.com/olafhering/grub grub-" .. pkg.version)
 
 			print("Cloning grub-extras...")
 			sh("cd " .. tmpdir .. " && git clone --depth=1 https://git.savannah.gnu.org/git/grub-extras.git")
