@@ -1,6 +1,6 @@
 pkg = {
 	name = "org.gnu.grub",
-	version = "2.14",
+	version = "2.12",
 	description = "GNU GRUB bootloader.",
 	maintainer = "NEOAPPS <neo@obsidianos.xyz>",
 	license = "GPL-3.0",
