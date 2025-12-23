@@ -59,7 +59,7 @@ function pkg.source()
 					.. tmpdir
 					.. "/grub-extras && export GNULIB_SRCDIR="
 					.. tmpdir
-					.. "/gnulib && ./autogen.sh"
+					.. "/gnulib && ./bootstrap"
 			)
 		end)
 
